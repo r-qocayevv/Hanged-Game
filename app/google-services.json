@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "1069989325293",
+    "project_id": "hanged-19a3d",
+    "storage_bucket": "hanged-19a3d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069989325293:android:2ec9904160be9042eb1fe4",
+        "android_client_info": {
+          "package_name": "com.example.hanged"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5G6bwiJaWmJxmB6eN8Exz-kVsN13qQKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069989325293:android:4e0bb2885e3c218eeb1fe4",
+        "android_client_info": {
+          "package_name": "com.example.hangedgame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5G6bwiJaWmJxmB6eN8Exz-kVsN13qQKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069989325293:android:9735edc8e3005f52eb1fe4",
+        "android_client_info": {
+          "package_name": "com.revan.hanged"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5G6bwiJaWmJxmB6eN8Exz-kVsN13qQKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

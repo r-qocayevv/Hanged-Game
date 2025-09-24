@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Hanged</string>
+    <string name="hanged">Hanged</string>
+    <string name="sign_in">Sign in</string>
+    <string name="or">OR</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="empty_available_room_text">"The gallows are ready,\nbut there’s no room… "</string>
+</resources>
