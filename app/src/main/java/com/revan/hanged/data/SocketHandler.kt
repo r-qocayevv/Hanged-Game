@@ -19,17 +19,15 @@ class SocketHandler @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val _roomUpdate: MutableSharedFlow<RoomUpdate?> = MutableSharedFlow()
-    val roomUpdate = _roomUpdate.asSharedFlow()
+    private val _socketEvents = MutableSharedFlow<SocketEvents>()
+    val socketEvents = _socketEvents.asSharedFlow()
 
     init {
         socketService.connect()
-        observeSocket(scope)
+        observeSocket()
     }
 
-    fun observeSocket(
-        scope: CoroutineScope
-    ) {
+    fun observeSocket() {
         socketService.on(Socket.EVENT_CONNECT) {
             Log.d("SOCKET_EVENT", "SOCKET CONNECT")
         }
@@ -43,7 +41,7 @@ class SocketHandler @Inject constructor(
             val roomUpdate: RoomUpdate? = JsonParser.parseFromJson(dataJson)
             Log.d("SOCKET_EVENT", "RoomUpdate → $roomUpdate")
             scope.launch {
-                _roomUpdate.emit(roomUpdate)
+                _socketEvents.emit(SocketEvents.RoomUpdateEvent(roomUpdate))
             }
         }
     }
@@ -51,11 +49,13 @@ class SocketHandler @Inject constructor(
     fun joinRoom(joinRoomInfo : JoinRoomInfo) {
         val messageData = JSONObject()
 
-        messageData.put("roomId", joinRoomInfo.roomId)
-        messageData.put("userId", joinRoomInfo.userId)
-        messageData.put("userName", joinRoomInfo.userName)
-        messageData.put("difficulty", joinRoomInfo.difficulty)
-        messageData.put("language", joinRoomInfo.language)
+        messageData.apply {
+            put("roomId", joinRoomInfo.roomId)
+            put("userId", joinRoomInfo.userId)
+            put("userName", joinRoomInfo.userName)
+            put("difficulty", joinRoomInfo.difficulty)
+            put("language", joinRoomInfo.language)
+        }
 
         socketService.emit("joinRoom",messageData)
     }

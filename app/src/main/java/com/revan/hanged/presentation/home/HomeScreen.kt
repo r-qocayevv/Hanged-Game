@@ -19,21 +19,28 @@ import com.revan.hanged.ui.theme.DarkGray
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    username : String,
     uiState: HomeState,
-    onEvent : (HomeEvent) -> Unit
+    onEvent: (HomeEvent) -> Unit
 ) {
-    Column (
-        modifier = modifier.fillMaxSize().background(color = DarkGray).padding(horizontal = 15.dp).systemBarsPadding()
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = DarkGray)
+            .padding(horizontal = 15.dp)
+            .systemBarsPadding()
     ) {
 
-        HomeHeader()
+        HomeHeader(username = username, logoutButtonClick = {
+            onEvent(HomeEvent.LogOut)
+        })
 
         Spacer(Modifier.height(46.dp))
 
         HomeContent(uiState = uiState, onEvent = onEvent)
 
         if (uiState.isVisibleRoomStatusGuide) {
-            RoomStatusGuide (onEvent = onEvent)
+            RoomStatusGuide(onEvent = onEvent)
         }
     }
 }
@@ -41,5 +48,5 @@ fun HomeScreen(
 @Preview
 @Composable
 private fun HomeScreenPrev() {
-    HomeScreen(uiState = HomeState(), onEvent = {})
+    HomeScreen(uiState = HomeState(), onEvent = {}, username =  "Raven")
 }

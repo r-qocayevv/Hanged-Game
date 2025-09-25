@@ -23,7 +23,7 @@ fun ModalSheetContent(
 ) {
     LazyColumn (
         verticalArrangement = Arrangement.spacedBy(22.dp),
-        modifier = Modifier.padding(start = 34.dp, end = 34.dp, bottom = 23.dp)
+        modifier = modifier.padding(start = 34.dp, end = 34.dp, bottom = 23.dp)
     ){
         item{
             Text(

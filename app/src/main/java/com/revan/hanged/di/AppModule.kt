@@ -1,8 +1,10 @@
 package com.revan.hanged.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.revan.hanged.data.repository.FirebaseRepositoryImpl
 import com.revan.hanged.domain.FirebaseRepository
+import com.revan.hanged.navigation.Navigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +41,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseRepository (firestore : FirebaseFirestore) : FirebaseRepository {
-        return FirebaseRepositoryImpl(firestore)
+    fun provideFirebaseAuth  () : FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNavigator () : Navigator {
+        return Navigator()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseRepository (firestore : FirebaseFirestore,firebaseAuth: FirebaseAuth) : FirebaseRepository {
+        return FirebaseRepositoryImpl(firestore,firebaseAuth)
     }
 
 }

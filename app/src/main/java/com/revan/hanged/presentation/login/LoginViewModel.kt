@@ -1,7 +1,114 @@
 package com.revan.hanged.presentation.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.revan.hanged.domain.use_case.GetUsernameFomFirestoreUseCase
+import com.revan.hanged.domain.use_case.SignInWithAnonymouslyUseCase
+import com.revan.hanged.domain.use_case.SignInWithEmailUseCase
+import com.revan.hanged.navigation.NavigationCommand
+import com.revan.hanged.navigation.Navigator
+import com.revan.hanged.navigation.ScreenRoute
+import com.revan.hanged.utils.isValidEmail
+import com.revan.hanged.utils.isValidPassword
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val navigator: Navigator,
+    private val signInWithEmailUseCase: SignInWithEmailUseCase,
+    private val signInWithAnonymouslyUseCase: SignInWithAnonymouslyUseCase,
+    private val getUsernameFomFirestoreUseCase: GetUsernameFomFirestoreUseCase
+) : ViewModel() {
+
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
+
+
+    fun onEvent(event: LoginEvent) {
+        when (event) {
+            is LoginEvent.EmailChanged -> {
+                emailChanged(event.newEmail)
+            }
+
+            is LoginEvent.PasswordChanged -> {
+                passwordChanged(event.newPassword)
+            }
+
+            LoginEvent.SignInWithEmail -> {
+                signInWithEmail()
+            }
+
+            LoginEvent.SignInWithAnonymously -> {
+                signInWithAnonymously()
+            }
+
+            LoginEvent.CheckValidation -> {
+                checkValidation()
+            }
+
+            LoginEvent.ChangePasswordVisibility -> {
+                changePasswordVisibility()
+            }
+
+            is LoginEvent.OnNavigate -> {
+                navigate(event.route, event.popUpTo)
+            }
+        }
+    }
+
+    private fun navigate(route: ScreenRoute,popUpTo: ScreenRoute?) {
+        viewModelScope.launch {
+            navigator.sendNavigation(NavigationCommand.OnNavigate(route = route, popUpTo = popUpTo ))
+        }
+    }
+
+    private fun changePasswordVisibility() {
+        _state.update {
+            it.copy(
+                isPasswordVisible = !_state.value.isPasswordVisible
+            )
+        }
+    }
+
+    private fun checkValidation() {
+        val email = _state.value.email
+        val password = _state.value.password
+
+        _state.update { it.copy(isButtonEnabled = (password.isValidPassword() && email.isValidEmail())) }
+    }
+
+    private fun emailChanged(newEmail: String) {
+        _state.update { it.copy(email = newEmail) }
+    }
+
+    private fun signInWithAnonymously() {
+        viewModelScope.launch {
+            val userUid = signInWithAnonymouslyUseCase()
+            println("userUid anonymously: $userUid")
+        }
+    }
+
+    private fun passwordChanged(newPassword: String) {
+        _state.update { it.copy(password = newPassword) }
+    }
+
+    private fun signInWithEmail() {
+        val email = _state.value.email
+        val password = _state.value.password
+
+        viewModelScope.launch {
+            val userUid = signInWithEmailUseCase(email = email, password = password)
+            val username = getUsernameFomFirestoreUseCase(userUid = userUid)
+            navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
+        }
+    }
+
+
+
 
 }

@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +21,9 @@ import com.revan.hanged.utils.clickWithoutRipple
 
 @Composable
 fun HomeHeader(
-    modifier: Modifier = Modifier
+    username  : String,
+    modifier: Modifier = Modifier,
+    logoutButtonClick : () -> Unit
 ) {
     Row (
         modifier = modifier,
@@ -31,7 +34,7 @@ fun HomeHeader(
         ) {
             CustomHangedText(size = 24.sp)
             Text(
-                text = "Welcome, user",
+                text = stringResource(R.string.welcome, username),
                 fontSize = 12.sp,
                 color = LightGray,
                 fontWeight = FontWeight.SemiBold
@@ -42,7 +45,7 @@ fun HomeHeader(
             contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier.clickWithoutRipple {
-
+                logoutButtonClick()
             }
         )
     }
@@ -51,5 +54,5 @@ fun HomeHeader(
 @Preview
 @Composable
 private fun HomeHeaderPrev() {
-    HomeHeader()
+    HomeHeader(username = "Raven", logoutButtonClick = {})
 }

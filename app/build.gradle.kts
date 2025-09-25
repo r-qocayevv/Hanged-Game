@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,16 +64,19 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     //Hilt
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
     //FIrebase
-    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation(libs.firebase.bom)
+    implementation(libs.google.firebase.auth)
     //Socket IO
-    implementation("io.socket:socket.io-client:2.1.2")
+    implementation(libs.socket.io.client)
     //Gson
-    implementation("com.google.code.gson:gson:2.13.1")
+    implementation(libs.gson)
     //Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation(libs.kotlinx.serialization.json)
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
 
 }

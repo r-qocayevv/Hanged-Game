@@ -5,11 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import com.revan.hanged.presentation.home.HomeEvent
 import com.revan.hanged.presentation.home.HomeState
 import com.revan.hanged.ui.theme.DarkGray
 import com.revan.hanged.ui.theme.LightGray
+import com.revan.hanged.ui.theme.Red
 import com.revan.hanged.utils.clickWithoutRipple
 
 @Composable
@@ -37,7 +39,6 @@ fun HomeContent(
     onEvent: (HomeEvent) -> Unit
 ) {
 
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -45,7 +46,9 @@ fun HomeContent(
 
         stickyHeader {
             Row(
-                modifier = Modifier.fillMaxWidth().background(color = DarkGray),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = DarkGray),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -68,6 +71,19 @@ fun HomeContent(
             }
         }
 
+        if (uiState.isLoading) {
+            item {
+                Box(
+                    modifier = Modifier.fillParentMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = Red,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
         if (uiState.rooms.isNotEmpty()) {
             items(uiState.rooms) { room ->
                 RoomListItem(room = room, onEvent = onEvent)
@@ -78,6 +94,8 @@ fun HomeContent(
             }
         }
     }
+
+
 }
 
 @Preview

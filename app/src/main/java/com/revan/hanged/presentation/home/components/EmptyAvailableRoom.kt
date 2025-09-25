@@ -44,7 +44,7 @@ fun EmptyAvailableRoom(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.empty_available_room_text),
                 textAlign = TextAlign.Center,
-                color = LightGray,
+                color = Color(0xFF5E6268),
                 fontWeight = FontWeight.Medium,
                 fontSize = 12.sp
             )

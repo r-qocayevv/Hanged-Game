@@ -5,4 +5,8 @@
     <string name="or">OR</string>
     <string name="continue_as_guest">Continue as guest</string>
     <string name="empty_available_room_text">"The gallows are ready,\nbut there’s no room… "</string>
+    <string name="sign_up">Sign up</string>
+    <string name="don_t_have_an_account">"Don’t have an account? "</string>
+    <string name="already_have_an_account">"Already have an account? "</string>
+    <string name="welcome">Welcome, %1$s</string>
 </resources>

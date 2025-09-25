@@ -1,4 +1,4 @@
-package com.revan.hanged.presentation.login
+package com.revan.hanged.presentation.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,23 +31,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.navigation.ScreenRoute
-import com.revan.hanged.presentation.login.components.ContinueAsGuestButton
 import com.revan.hanged.presentation.login.components.CustomButton
 import com.revan.hanged.presentation.login.components.CustomTextField
-import com.revan.hanged.presentation.login.components.OrDivider
 import com.revan.hanged.ui.theme.LightGray
 import com.revan.hanged.ui.theme.Red
 import com.revan.hanged.utils.clickWithoutRipple
 
+
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     modifier: Modifier = Modifier,
-    uiState: LoginState,
-    onEvent: (LoginEvent) -> Unit
+    uiState: RegisterState,
+    onEvent: (RegisterEvent) -> Unit
 ) {
 
-    LaunchedEffect(key1 = uiState.password, key2 = uiState.email ) {
-        onEvent(LoginEvent.CheckValidation)
+    LaunchedEffect(key1 = uiState.email,key2 = uiState.password, key3 = uiState.username) {
+        onEvent(RegisterEvent.CheckValidation)
     }
 
     Box(
@@ -87,7 +83,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.sign_in),
+                    text = stringResource(R.string.sign_up),
                     fontSize = 24.sp,
                     color = LightGray,
                     textAlign = TextAlign.Center,
@@ -96,10 +92,20 @@ fun LoginScreen(
                 Spacer(Modifier.height(30.dp))
 
                 CustomTextField(
+                    text = uiState.username,
+                    keyboardType = KeyboardType.Text,
+                    onValueChange = { username ->
+                        onEvent(RegisterEvent.UsernameChanged(newUsername = username))
+                    }
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                CustomTextField(
                     text = uiState.email,
                     keyboardType = KeyboardType.Email,
                     onValueChange = { email ->
-                        onEvent(LoginEvent.EmailChanged(email))
+                        onEvent(RegisterEvent.EmailChanged(newEmail = email))
                     }
                 )
 
@@ -109,45 +115,43 @@ fun LoginScreen(
                     text = uiState.password,
                     keyboardType = KeyboardType.Password,
                     onValueChange = { password ->
-                        onEvent(LoginEvent.PasswordChanged(password))
+                        onEvent(RegisterEvent.PasswordChanged(newPassword = password))
                     },
-                    isPasswordVisible = uiState.isPasswordVisible,
                     showPasswordIconClicked = {
-                        onEvent(LoginEvent.ChangePasswordVisibility)
-                    }
+                        onEvent(RegisterEvent.ChangePasswordVisibility)
+                    },
+                    isPasswordVisible = uiState.isPasswordVisible
                 )
+
+
 
                 Spacer(Modifier.height(29.dp))
 
                 CustomButton(
                     modifier = Modifier.fillMaxWidth(),
                     textVerticalPadding = 15.dp,
-                    text = stringResource(R.string.sign_in),
+                    text = stringResource(R.string.sign_up),
                     isButtonEnabled = uiState.isButtonEnabled,
                     onClick = {
-                        onEvent(LoginEvent.SignInWithEmail)
+                        onEvent(RegisterEvent.SignUp)
                     })
 
                 Spacer(Modifier.height(11.dp))
-                OrDivider()
-                Spacer(Modifier.height(11.dp))
-                ContinueAsGuestButton(onClick = {
-                    onEvent(LoginEvent.SignInWithAnonymously)
-                })
+
             }
 
             Text(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
-                    .clickWithoutRipple(onClick ={
-                        onEvent(LoginEvent.OnNavigate(route = ScreenRoute.Register, popUpTo = ScreenRoute.Register))
+                    .clickWithoutRipple(onClick = {
+                        onEvent(RegisterEvent.OnNavigate(ScreenRoute.Login, popUpTo = ScreenRoute.Login))
                     }),
                 text = buildAnnotatedString {
                     withStyle(style = SpanStyle(color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
-                        append(stringResource(R.string.don_t_have_an_account))
+                        append(stringResource(R.string.already_have_an_account))
                     }
                     withStyle(style = SpanStyle(color = Red, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
-                        append(stringResource(R.string.sign_up))
+                        append(stringResource(R.string.sign_in))
                     }
                 }
             )
@@ -157,8 +161,8 @@ fun LoginScreen(
 
 @Preview()
 @Composable
-private fun LoginScreenPrev() {
+private fun RegisterScreenPrev() {
     MaterialTheme {
-        LoginScreen(uiState = LoginState(), onEvent = {})
+        RegisterScreen(uiState = RegisterState(), onEvent = {})
     }
 }

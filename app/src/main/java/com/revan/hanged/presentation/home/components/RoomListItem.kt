@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.domain.RoomStatus
+import com.revan.hanged.domain.model.JoinRoomInfo
 import com.revan.hanged.domain.model.Room
 import com.revan.hanged.presentation.home.HomeEvent
 import com.revan.hanged.presentation.home.HomeState
@@ -37,6 +38,7 @@ fun RoomListItem(
     room : Room
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .background(Color(0xFF2E3641), shape = RoundedCornerShape(10.dp))
             .border(1.dp, color = Color(0xFFC5C5C4).copy(0.2f), shape = RoundedCornerShape(10.dp))
@@ -114,9 +116,9 @@ fun RoomListItem(
                 )
             }
         }
-        CustomButton(text = "Join", isButtonEnabled = room.status != RoomStatus.FULL, textPadding = 0.dp, onClick = {
+        CustomButton(text = "Join", isButtonEnabled = room.status != RoomStatus.FULL, onClick = {
             //TODO USER melumatlarini registerden sonra götürmek
-            onEvent(HomeEvent.JoinRoom(room = room, userId = "aaabbbccc", username = "RAVEN"))
+            onEvent(HomeEvent.JoinRoom(JoinRoomInfo(room.roomId,"","Raven",room.difficulty,room.language)))
         })
     }
 }

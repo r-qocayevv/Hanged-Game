@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.revan.hanged.R
 import com.revan.hanged.ui.theme.DarkGray
 import com.revan.hanged.ui.theme.LightGray
+import com.revan.hanged.utils.clickWithoutRipple
 
 @Composable
 fun CustomTextField(
@@ -27,7 +28,8 @@ fun CustomTextField(
     keyboardType: KeyboardType,
     text: String,
     onValueChange: (String) -> Unit,
-    isPasswordVisible: Boolean = false
+    isPasswordVisible: Boolean = false,
+    showPasswordIconClicked : () -> Unit = {}
 ) {
     TextField(
         value = text,
@@ -39,7 +41,8 @@ fun CustomTextField(
         placeholder = {
             Text(
                 if (keyboardType == KeyboardType.Email) "Email"
-                else if (keyboardType == KeyboardType.Password) "Password" else "",
+                else if (keyboardType == KeyboardType.Password) "Password" else "Username",
+
                 color = LightGray,
             )
         },
@@ -58,15 +61,18 @@ fun CustomTextField(
             if (keyboardType == KeyboardType.Password) {
                 Icon(
                     imageVector = ImageVector.vectorResource(
-                        if (isPasswordVisible) R.drawable.ic_hide_password else R.drawable.ic_show_password
+                        if (!isPasswordVisible) R.drawable.ic_hide_password else R.drawable.ic_show_password
                     ),
                     contentDescription = null,
-                    tint = Color.Unspecified
+                    tint = Color.Unspecified,
+                    modifier = Modifier.clickWithoutRipple({
+                        showPasswordIconClicked()
+                    })
                 )
             }
         },
         visualTransformation = if (keyboardType == KeyboardType.Password) {
-            if (isPasswordVisible) PasswordVisualTransformation('*') else VisualTransformation.None
+            if (!isPasswordVisible) PasswordVisualTransformation('*') else VisualTransformation.None
         } else {
             VisualTransformation.None
         },

@@ -2,6 +2,7 @@ package com.revan.hanged.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revan.hanged.data.SocketEvents
 import com.revan.hanged.data.SocketHandler
 import com.revan.hanged.domain.RoomStatus
 import com.revan.hanged.domain.model.JoinRoomInfo
@@ -10,6 +11,10 @@ import com.revan.hanged.domain.model.RoomUpdate
 import com.revan.hanged.domain.model.RoomUpdateType
 import com.revan.hanged.domain.use_case.GetGamesUseCase
 import com.revan.hanged.domain.use_case.GetRoomsUseCase
+import com.revan.hanged.domain.use_case.LogoutUseCase
+import com.revan.hanged.navigation.NavigationCommand
+import com.revan.hanged.navigation.Navigator
+import com.revan.hanged.navigation.ScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,19 +24,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val navigator: Navigator,
     private val getRoomsUseCase: GetRoomsUseCase,
     private val getGamesUseCase: GetGamesUseCase,
+    private val logoutUseCase: LogoutUseCase,
     private val socketHandler: SocketHandler
 ) : ViewModel() {
+
+    private val _state = MutableStateFlow(HomeState())
+    val state = _state.asStateFlow()
+
 
     init {
         getRooms()
         getGames()
         observeRoomUpdate()
     }
-
-    private val _state = MutableStateFlow(HomeState())
-    val state = _state.asStateFlow()
 
     fun onEvent(event: HomeEvent) {
         when (event) {
@@ -40,32 +48,40 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeEvent.JoinRoom -> {
-                val room = event.room
-                val userId = event.userId
-                val username = event.username
-
-                val joinRoomInfo = JoinRoomInfo(
-                    roomId = room.roomId,
-                    userId = userId,
-                    userName = username,
-                    difficulty = room.difficulty,
-                    language = room.language
-                )
-                if (room.status != RoomStatus.FULL) {
-                    joinRoom(joinRoomInfo)
-                }
+                joinRoom(roomInfo = event.roomInfo)
             }
+
+            is HomeEvent.OnNavigate -> {
+                navigate(event.route)
+            }
+
+            HomeEvent.LogOut -> {
+                logoutUseCase()
+                navigate(ScreenRoute.Login)
+            }
+        }
+    }
+
+    private fun navigate(route: ScreenRoute) {
+        viewModelScope.launch {
+            navigator.sendNavigation(NavigationCommand.OnNavigate(route = route))
         }
     }
 
 
     fun getRooms() {
+        _state.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
             val rooms = getRoomsUseCase()
             _state.update {
                 it.copy(
                     rooms = rooms,
-                    availableRoomCount = rooms.size
+                    availableRoomCount = rooms.size,
+                    isLoading = false
                 )
             }
         }
@@ -91,33 +107,30 @@ class HomeViewModel @Inject constructor(
 
     fun observeRoomUpdate() {
         viewModelScope.launch {
-            socketHandler.roomUpdate.collect { roomUpdate ->
-                roomUpdate?.let { safeRoomUpdate ->
-                    updateRoomState(safeRoomUpdate)
+            socketHandler.socketEvents.collect { event ->
+                when(event) {
+                    is SocketEvents.RoomUpdateEvent -> {
+                        event.roomUpdate?.let { safeRoomUpdate ->
+                            updateRoomState(safeRoomUpdate)
+                        }
+                    }
                 }
             }
         }
     }
 
     private fun updateRoomState(roomUpdate: RoomUpdate) {
-        val updatedList = _state.value.rooms.map { currentRoom ->
+        val updatedList = state.value.rooms.map { currentRoom ->
             if (currentRoom.roomId == roomUpdate.roomId) {
                 val room = updateRoomPlayerCount(roomUpdate, currentRoom)
-                val roomStatus =
-                    if (room.playerCount == room.maxPlayers) RoomStatus.FULL else room.status
-                room.copy(
-                    status = roomStatus
-                )
-
+                val roomStatus = if (room.playerCount == room.maxPlayers) RoomStatus.FULL else room.status
+                room.copy(status = roomStatus)
             } else {
                 currentRoom
             }
-
         }
         _state.update {
-            it.copy(
-                rooms = updatedList
-            )
+            it.copy(rooms = updatedList)
         }
     }
 
@@ -146,11 +159,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun showRoomStatusGuide(showBottomSheet: Boolean) {
-        _state.update {
-            it.copy(
-                isVisibleRoomStatusGuide = showBottomSheet
-
-            )
-        }
+        _state.update { it.copy(isVisibleRoomStatusGuide = showBottomSheet) }
     }
 }

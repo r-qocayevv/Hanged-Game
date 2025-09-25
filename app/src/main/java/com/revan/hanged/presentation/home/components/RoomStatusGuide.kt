@@ -22,7 +22,7 @@ fun RoomStatusGuide(
         modifier = modifier.padding(horizontal = 20.dp),
         onDismissRequest = {
             onEvent(HomeEvent.ShowRoomStatusGuide(showBottomSheet = false))
-        },
+        }
     ) {
         ModalSheetContent()
     }
