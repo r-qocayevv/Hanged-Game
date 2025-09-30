@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +20,7 @@ import com.revan.hanged.ui.theme.DarkGray
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    username : String,
+    username: String,
     uiState: HomeState,
     onEvent: (HomeEvent) -> Unit
 ) {
@@ -32,7 +33,7 @@ fun HomeScreen(
     ) {
 
         HomeHeader(username = username, logoutButtonClick = {
-            onEvent(HomeEvent.LogOut)
+            onEvent(HomeEvent.LogOut(username = username))
         })
 
         Spacer(Modifier.height(46.dp))
@@ -45,8 +46,9 @@ fun HomeScreen(
     }
 }
 
+
 @Preview
 @Composable
 private fun HomeScreenPrev() {
-    HomeScreen(uiState = HomeState(), onEvent = {}, username =  "Raven")
+    HomeScreen(uiState = HomeState(), onEvent = {}, username = "Raven")
 }

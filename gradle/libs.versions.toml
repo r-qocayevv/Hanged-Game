@@ -1,5 +1,6 @@
 [versions]
 agp = "8.13.0"
+datastorePreferences = "1.1.7"
 firebaseBom = "34.3.0"
 gson = "2.13.2"
 hiltAndroidCompiler = "2.56.2"
@@ -14,12 +15,14 @@ lifecycleRuntimeKtx = "2.9.3"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 firebaseFirestore = "26.0.1"
+lottieCompose = "6.6.9"
 navigationCompose = "2.9.3"
 socketIoClient = "2.1.2"
 firebaseAuth = "24.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -42,6 +45,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socketIoClient" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 

@@ -24,16 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.domain.RoomStatus
-import com.revan.hanged.domain.model.JoinRoomInfo
 import com.revan.hanged.domain.model.Room
+import com.revan.hanged.domain.model.toJoinRoomInfo
 import com.revan.hanged.presentation.home.HomeEvent
+import com.revan.hanged.presentation.components.CustomButton
 import com.revan.hanged.presentation.home.HomeState
-import com.revan.hanged.presentation.login.components.CustomButton
 import com.revan.hanged.ui.theme.LightGray
 
 @Composable
 fun RoomListItem(
     modifier: Modifier = Modifier,
+    uiState : HomeState,
     onEvent : (HomeEvent) -> Unit,
     room : Room
 ) {
@@ -116,9 +117,8 @@ fun RoomListItem(
                 )
             }
         }
-        CustomButton(text = "Join", isButtonEnabled = room.status != RoomStatus.FULL, onClick = {
-            //TODO USER melumatlarini registerden sonra götürmek
-            onEvent(HomeEvent.JoinRoom(JoinRoomInfo(room.roomId,"","Raven",room.difficulty,room.language)))
+        CustomButton(text = "Join", isButtonEnabled = room.status == RoomStatus.WAITING, onClick = {
+            onEvent(HomeEvent.JoinRoom(roomInfo = room.toJoinRoomInfo(username = uiState.username, userId = uiState.userId)))
         })
     }
 }
@@ -126,5 +126,5 @@ fun RoomListItem(
 @Preview
 @Composable
 private fun RoomListItemPrev() {
-    RoomListItem(room = Room("","hard","Az",4,4,"","Raven`s room", RoomStatus.PLAYING), onEvent = {})
+    RoomListItem(room = Room("","hard","Az",4,4,"","Raven`s room", RoomStatus.PLAYING), onEvent = {}, uiState = HomeState())
 }

@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,13 +43,17 @@ fun RoomStatusListItem (
             Text(
                 text = roomStatus.label,
                 color = roomStatus.color,
+                lineHeight = 12.sp,
                 fontSize = 12.sp,
+                letterSpacing = 0.sp,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text = roomStatus.description,
                 color = LightGray,
                 fontSize = 10.sp,
+                letterSpacing = 0.sp,
+                lineHeight = 12.sp,
                 fontWeight = FontWeight.Medium,
             )
         }

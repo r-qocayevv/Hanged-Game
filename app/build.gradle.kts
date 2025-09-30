@@ -78,5 +78,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     //Navigation
     implementation(libs.androidx.navigation.compose)
+    //Lottie animation
+    implementation(libs.lottie.compose)
+    //Data store
+    implementation(libs.androidx.datastore.preferences)
 
 }

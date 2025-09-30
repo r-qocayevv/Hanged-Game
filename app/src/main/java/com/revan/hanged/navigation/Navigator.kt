@@ -8,7 +8,6 @@ import com.revan.hanged.utils.safePopBackStack
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 
 class Navigator {
 
@@ -25,7 +24,6 @@ class Navigator {
             .collectLatest {
                 when (it) {
                     is NavigationCommand.OnNavigate -> {
-
                         navController.safeNavigate(route = it.route, popUpTo = it.popUpTo)
                     }
 

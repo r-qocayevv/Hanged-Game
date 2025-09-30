@@ -44,9 +44,11 @@ fun HomeHeader(
             imageVector = ImageVector.vectorResource(R.drawable.ic_log_out),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.clickWithoutRipple {
-                logoutButtonClick()
-            }
+            modifier = Modifier.clickWithoutRipple(
+                onClick = {
+                    logoutButtonClick()
+                }
+            )
         )
     }
 }

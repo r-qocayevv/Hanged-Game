@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -34,8 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.navigation.ScreenRoute
+import com.revan.hanged.presentation.components.CustomButton
 import com.revan.hanged.presentation.login.components.ContinueAsGuestButton
-import com.revan.hanged.presentation.login.components.CustomButton
 import com.revan.hanged.presentation.login.components.CustomTextField
 import com.revan.hanged.presentation.login.components.OrDivider
 import com.revan.hanged.ui.theme.LightGray
@@ -49,7 +50,7 @@ fun LoginScreen(
     onEvent: (LoginEvent) -> Unit
 ) {
 
-    LaunchedEffect(key1 = uiState.password, key2 = uiState.email ) {
+    LaunchedEffect(key1 = uiState.password, key2 = uiState.email) {
         onEvent(LoginEvent.CheckValidation)
     }
 
@@ -64,7 +65,11 @@ fun LoginScreen(
         )
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -82,7 +87,7 @@ fun LoginScreen(
             }
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .imePadding()
                     .padding(vertical = 90.dp, horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -104,7 +109,6 @@ fun LoginScreen(
                 )
 
                 Spacer(Modifier.height(12.dp))
-
                 CustomTextField(
                     text = uiState.password,
                     keyboardType = KeyboardType.Password,
@@ -139,14 +143,31 @@ fun LoginScreen(
             Text(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
-                    .clickWithoutRipple(onClick ={
-                        onEvent(LoginEvent.OnNavigate(route = ScreenRoute.Register, popUpTo = ScreenRoute.Register))
+                    .clickWithoutRipple(onClick = {
+                        onEvent(
+                            LoginEvent.OnNavigate(
+                                route = ScreenRoute.Register,
+                                popUpTo = ScreenRoute.Register
+                            )
+                        )
                     }),
                 text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
                         append(stringResource(R.string.don_t_have_an_account))
                     }
-                    withStyle(style = SpanStyle(color = Red, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
+                    withStyle(
+                        style = SpanStyle(
+                            color = Red,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
                         append(stringResource(R.string.sign_up))
                     }
                 }

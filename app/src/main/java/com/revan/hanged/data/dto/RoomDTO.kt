@@ -15,6 +15,8 @@ data class RoomsDTO(
     val difficulty: String = "",
     @SerializedName("language")
     val language: String = "",
+    @SerializedName("playerCount")
+    val playerCount : Int = 0,
     @SerializedName("maxPlayers")
     val maxPlayers: Int = 0,
     @SerializedName("roomId")
@@ -31,6 +33,7 @@ fun RoomsDTO.toRooms () : Room {
         difficulty = difficulty.firstCharToUpperCase(),
         language = language,
         maxPlayers = maxPlayers,
+        playerCount = playerCount,
         roomId = roomId,
         roomName = roomName,
         status = status.toRoomStatus()

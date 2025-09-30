@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.revan.hanged.presentation.home.HomeEvent
-import com.revan.hanged.ui.theme.DarkGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +23,7 @@ fun RoomStatusGuide(
             onEvent(HomeEvent.ShowRoomStatusGuide(showBottomSheet = false))
         }
     ) {
-        ModalSheetContent()
+        RoomGuideModalSheetContent()
     }
 }
 

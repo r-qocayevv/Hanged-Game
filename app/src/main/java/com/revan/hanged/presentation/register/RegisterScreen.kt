@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.navigation.ScreenRoute
-import com.revan.hanged.presentation.login.components.CustomButton
+import com.revan.hanged.presentation.components.CustomButton
 import com.revan.hanged.presentation.login.components.CustomTextField
 import com.revan.hanged.ui.theme.LightGray
 import com.revan.hanged.ui.theme.Red
@@ -45,7 +49,7 @@ fun RegisterScreen(
     onEvent: (RegisterEvent) -> Unit
 ) {
 
-    LaunchedEffect(key1 = uiState.email,key2 = uiState.password, key3 = uiState.username) {
+    LaunchedEffect(key1 = uiState.email, key2 = uiState.password, key3 = uiState.username) {
         onEvent(RegisterEvent.CheckValidation)
     }
 
@@ -60,7 +64,11 @@ fun RegisterScreen(
         )
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -78,7 +86,6 @@ fun RegisterScreen(
             }
             Column(
                 modifier = Modifier
-                    .weight(1f)
                     .padding(vertical = 90.dp, horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -144,13 +151,30 @@ fun RegisterScreen(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .clickWithoutRipple(onClick = {
-                        onEvent(RegisterEvent.OnNavigate(ScreenRoute.Login, popUpTo = ScreenRoute.Login))
+                        onEvent(
+                            RegisterEvent.OnNavigate(
+                                ScreenRoute.Login,
+                                popUpTo = ScreenRoute.Login
+                            )
+                        )
                     }),
                 text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
                         append(stringResource(R.string.already_have_an_account))
                     }
-                    withStyle(style = SpanStyle(color = Red, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)){
+                    withStyle(
+                        style = SpanStyle(
+                            color = Red,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    ) {
                         append(stringResource(R.string.sign_in))
                     }
                 }

@@ -3,6 +3,10 @@ package com.revan.hanged.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revan.hanged.domain.use_case.GetUsernameFomFirestoreUseCase
+import com.revan.hanged.domain.use_case.IsLoggedInUseCase
+import com.revan.hanged.domain.use_case.SaveLoginStateUseCase
+import com.revan.hanged.domain.use_case.SaveUserIdToLocalUseCase
+import com.revan.hanged.domain.use_case.SaveUsernameToLocalUseCase
 import com.revan.hanged.domain.use_case.SignInWithAnonymouslyUseCase
 import com.revan.hanged.domain.use_case.SignInWithEmailUseCase
 import com.revan.hanged.navigation.NavigationCommand
@@ -14,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -22,12 +27,29 @@ class LoginViewModel @Inject constructor(
     private val navigator: Navigator,
     private val signInWithEmailUseCase: SignInWithEmailUseCase,
     private val signInWithAnonymouslyUseCase: SignInWithAnonymouslyUseCase,
-    private val getUsernameFomFirestoreUseCase: GetUsernameFomFirestoreUseCase
+    private val getUsernameFomFirestoreUseCase: GetUsernameFomFirestoreUseCase,
+    private val saveUsernameToLocalUseCase: SaveUsernameToLocalUseCase,
+    private val saveUserIdToLocalUseCase: SaveUserIdToLocalUseCase,
+    private val saveLoginStateUseCase: SaveLoginStateUseCase,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
 
+    init {
+        isLoggedIn()
+    }
+
+    private fun isLoggedIn() {
+        viewModelScope.launch {
+            isLoggedInUseCase().collectLatest {
+                _state.update {
+                    it.copy(isLoggedIn = it.isLoggedIn)
+                }
+            }
+        }
+    }
 
     fun onEvent(event: LoginEvent) {
         when (event) {
@@ -89,12 +111,19 @@ class LoginViewModel @Inject constructor(
     private fun signInWithAnonymously() {
         viewModelScope.launch {
             val userUid = signInWithAnonymouslyUseCase()
-            println("userUid anonymously: $userUid")
         }
     }
 
     private fun passwordChanged(newPassword: String) {
         _state.update { it.copy(password = newPassword) }
+    }
+
+    private fun saveUserInfoToLocal (username : String, userUid : String) {
+        viewModelScope.launch {
+            saveUsernameToLocalUseCase(username = username)
+            saveUserIdToLocalUseCase(userId = userUid)
+            saveLoginStateUseCase(isLoggedIn = true)
+        }
     }
 
     private fun signInWithEmail() {
@@ -105,6 +134,7 @@ class LoginViewModel @Inject constructor(
             val userUid = signInWithEmailUseCase(email = email, password = password)
             val username = getUsernameFomFirestoreUseCase(userUid = userUid)
             navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
+            saveUserInfoToLocal(username = username,userUid = userUid)
         }
     }
 

@@ -1,6 +1,6 @@
 package com.revan.hanged.domain.use_case
 
-import com.revan.hanged.domain.FirebaseRepository
+import com.revan.hanged.domain.repository.FirebaseRepository
 import javax.inject.Inject
 
 class GetUsernameFomFirestoreUseCase @Inject constructor(

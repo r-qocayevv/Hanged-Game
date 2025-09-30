@@ -8,7 +8,7 @@ import com.revan.hanged.data.dto.GameDTO
 import com.revan.hanged.data.dto.RoomsDTO
 import com.revan.hanged.data.dto.toGame
 import com.revan.hanged.data.dto.toRooms
-import com.revan.hanged.domain.FirebaseRepository
+import com.revan.hanged.domain.repository.FirebaseRepository
 import com.revan.hanged.domain.model.Game
 import com.revan.hanged.domain.model.Room
 import com.revan.hanged.utils.Constants.FIREBASE_EMAIL
@@ -25,7 +25,7 @@ class FirebaseRepositoryImpl(
     override suspend fun getRooms(): List<Room> {
         val snapshot = firestore.collection(FIREBASE_ROOM_COLLECTION).get().await()
         val roomDto = snapshot.toObjects(RoomsDTO::class.java)
-        return roomDto.map { it.toRooms() }
+        return roomDto.map { it.toRooms() }.sortedBy { it.status }
 
     }
 
@@ -69,7 +69,6 @@ class FirebaseRepositoryImpl(
             if (it.isSuccessful) {
                 Log.d(TAG, "createUserWithEmail:success")
                 val user = firebaseAuth.currentUser?.uid
-                println("user: $user")
             } else {
                 Log.w(TAG, "createUserWithAnonymously:else condition", it.exception)
             }

@@ -6,7 +6,10 @@ import com.revan.hanged.domain.model.Room
 data class HomeState(
     val isVisibleRoomStatusGuide: Boolean = false,
     val isLoading : Boolean = false,
+    val username : String = "",
+    val userId : String = "",
     val rooms: List<Room> = emptyList(),
     val games: List<Game> = emptyList(),
-    val availableRoomCount: Int = 0
+    val availableRoomCount: Int = 0,
+    val isRefreshing: Boolean = false
 )

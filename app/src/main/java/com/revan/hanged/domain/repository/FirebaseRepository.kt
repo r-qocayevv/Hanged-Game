@@ -1,4 +1,4 @@
-package com.revan.hanged.domain
+package com.revan.hanged.domain.repository
 
 import com.revan.hanged.domain.model.Game
 import com.revan.hanged.domain.model.Room

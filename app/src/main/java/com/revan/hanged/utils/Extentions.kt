@@ -16,8 +16,9 @@ import com.revan.hanged.ui.theme.DarkGray
 import java.util.concurrent.TimeUnit
 
 
-fun Modifier.clickWithoutRipple (onClick : () -> Unit) : Modifier {
+fun Modifier.clickWithoutRipple (onClick : () -> Unit,isEnabled : Boolean = true) : Modifier {
     return this.clickable (
+        enabled = isEnabled,
         indication = null,
         interactionSource = null
     ){
@@ -107,7 +108,6 @@ fun String.firstCharToUpperCase () : String {
 
 fun NavHostController.safeNavigate (route: ScreenRoute, popUpTo: ScreenRoute?) {
     this.navigate(route) {
-        println("popupTo: $popUpTo")
         popUpTo?.let {
             this.popUpTo(it) {
                 inclusive = true
