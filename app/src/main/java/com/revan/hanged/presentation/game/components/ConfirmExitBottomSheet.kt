@@ -1,19 +1,19 @@
 package com.revan.hanged.presentation.game.components
 
-import android.R.attr.textColor
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,29 +26,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.presentation.components.CustomButton
+import com.revan.hanged.presentation.components.CustomWhiteButton
 import com.revan.hanged.ui.theme.LightGray
-import com.revan.hanged.ui.theme.Red
-import com.revan.hanged.utils.clickWithDarkGrayRipple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmExitBottomSheet(
     modifier: Modifier = Modifier,
-    onDismiss : () -> Unit,
-    exitGame : () -> Unit
+    onDismiss: () -> Unit,
+    exitGame: () -> Unit
 ) {
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { false }
+    )
+
     ModalBottomSheet(
         containerColor = Color(0xFF2E3740),
-        onDismissRequest = {
-            onDismiss()
-        },
+        sheetState = sheetState,
+        shape = RoundedCornerShape(16.dp),
+        onDismissRequest = {},
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .navigationBarsPadding(),
-
-        ) {
-        ConfirmExitBottomSheetContent(exitGame = exitGame,onDismiss = onDismiss)
+            .navigationBarsPadding()
+            .padding(bottom = 8.dp),
+    ) {
+        ConfirmExitBottomSheetContent(exitGame = exitGame, onDismiss = onDismiss)
     }
 }
 
@@ -80,43 +85,28 @@ private fun ConfirmExitBottomSheetContent(
             textAlign = TextAlign.Center,
         )
 
-        Row (
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp).navigationBarsPadding().padding(bottom = 8.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Max)
+                .padding(horizontal = 18.dp)
+                .padding(bottom = 15.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
 
 
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickWithDarkGrayRipple(
-                        isButtonEnabled = true,
-                        onClick = {
-                            onDismiss()
-                        }
-                    )
-                    .background(
-                        color = Color.Transparent,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(width = 1.dp, color = Red, shape = RoundedCornerShape(10.dp))
-                    .padding(vertical = 10.dp, horizontal = 10.dp)
-
-
-            ) {
-                Text(
-                    text = stringResource(R.string.stay),
-                    modifier = Modifier,
-                    color = Red,
-                    fontSize = 15.sp,
-                )
-            }
+            CustomWhiteButton(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.stay),
+                onClick = onDismiss
+            )
 
             CustomButton(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                roundedCornerShape = 15.dp,
                 text = stringResource(R.string.exit_game),
                 isButtonEnabled = true,
                 textVerticalPadding = 10.dp,

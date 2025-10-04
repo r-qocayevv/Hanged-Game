@@ -12,6 +12,8 @@ import com.revan.hanged.domain.model.CustomNavTypeRoomInfo
 import com.revan.hanged.domain.model.RoomInfo
 import com.revan.hanged.presentation.game.GameScreen
 import com.revan.hanged.presentation.game.GameViewModel
+import com.revan.hanged.presentation.game_history.GameHistoryScreen
+import com.revan.hanged.presentation.game_history.GameHistoryViewModel
 import com.revan.hanged.presentation.home.HomeScreen
 import com.revan.hanged.presentation.home.HomeViewModel
 import com.revan.hanged.presentation.login.LoginScreen
@@ -66,6 +68,13 @@ fun NavGraph(navController: NavHostController) {
             val uiState by gameViewModel.state.collectAsStateWithLifecycle()
 
             GameScreen(roomInfo = roomInfo,uiState = uiState, onEvent = gameViewModel::onEvent)
+        }
+
+        composable<ScreenRoute.GameHistory> {
+            val gameHistoryViewModel = hiltViewModel<GameHistoryViewModel>()
+            val uiState by gameHistoryViewModel.state.collectAsStateWithLifecycle()
+
+            GameHistoryScreen(uiState = uiState, onEvent = gameHistoryViewModel::onEvent)
         }
 
     }

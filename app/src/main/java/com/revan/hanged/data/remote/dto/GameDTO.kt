@@ -1,39 +1,42 @@
-package com.revan.hanged.data.dto
+package com.revan.hanged.data.remote.dto
 
-
-import com.google.firebase.Timestamp
 import com.google.gson.annotations.SerializedName
 import com.revan.hanged.domain.model.Game
 
 data class GameDTO(
     @SerializedName("createdAt")
-    val createdAt: String = "",
+    val createdAt: String,
     @SerializedName("difficulty")
-    val difficulty: String = "",
+    val difficulty: String,
+    @SerializedName("id")
+    val id: String,
     @SerializedName("language")
-    val language: String = "",
+    val language: String,
+    @SerializedName("wrongGuesses")
+    val wrongGuesses : Int,
     @SerializedName("players")
-    val players: List<PlayerDTO> = listOf(),
+    val players: List<PlayerDTO>,
     @SerializedName("roomId")
-    val roomId: String = "",
+    val roomId: String,
     @SerializedName("roomName")
-    val roomName: String = "",
+    val roomName: String,
     @SerializedName("winner")
-    val winner: WinnerDTO? = WinnerDTO(),
+    val winner: WinnerDTO,
     @SerializedName("word")
-    val word: String = ""
+    val word: String
 )
 
-fun GameDTO.toGame() : Game {
-    return Game (
+
+fun GameDTO.toGame(): Game {
+    return Game(
         createdAt = createdAt,
         difficulty = difficulty,
         language = language,
         players = players.map { it.toPlayer() },
         roomId = roomId,
-        roomName = roomName,
-        winner = winner?.toWinner(),
-        word = word
-
+        wrongGuesses = wrongGuesses,
+        winner = winner.toWinner(),
+        word = word,
+        roomName = roomName
     )
 }

@@ -34,6 +34,7 @@ import com.revan.hanged.presentation.game.GameState
 import com.revan.hanged.ui.theme.DarkGray
 import com.revan.hanged.ui.theme.LightGray
 import com.revan.hanged.utils.clickWithoutRipple
+import com.revan.hanged.utils.firstCharToUpperCase
 
 @Composable
 fun GameHeader(
@@ -60,6 +61,7 @@ fun GameHeader(
                 .statusBarsPadding(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = null,
@@ -80,6 +82,40 @@ fun GameHeader(
                 color = LightGray,
                 modifier = Modifier.weight(1f)
             )
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_flame),
+                contentDescription = null,
+                tint = LightGray
+            )
+            Spacer(Modifier.width(4.dp))
+
+            Text(
+                text = roomInfo.difficulty.firstCharToUpperCase(),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = LightGray,
+                modifier = Modifier.clickWithoutRipple(onClick = {
+                    onEvent(GameEvent.ChangePlayerBottomSheetState)
+                })
+            )
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_language),
+                contentDescription = null,
+                tint = LightGray
+            )
+            Spacer(Modifier.width(4.dp))
+
+            Text(
+                text = roomInfo.gameLanguage.language.firstCharToUpperCase(),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = LightGray,
+                modifier = Modifier.clickWithoutRipple(onClick = {
+                    onEvent(GameEvent.ChangePlayerBottomSheetState)
+                })
+            )
+            Spacer(Modifier.width(8.dp))
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_player),
                 contentDescription = null,
@@ -138,7 +174,7 @@ private fun GameHeaderPrev() {
             roomId = "123",
             userId = "123",
             userName = "123",
-            difficulty = "123",
+            difficulty = "easy",
             gameLanguage = com.revan.hanged.domain.GameLanguage.ENG,
             maxPlayerCount = 4,
             currentPlayerCount = 2

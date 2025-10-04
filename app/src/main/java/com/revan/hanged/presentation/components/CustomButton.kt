@@ -11,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -21,9 +23,11 @@ import com.revan.hanged.utils.clickWithDarkGrayRipple
 @Composable
 fun CustomButton(
     modifier: Modifier = Modifier,
+    roundedCornerShape: Dp = 10.dp,
     text: String,
     textVerticalPadding: Dp = 6.dp,
     isButtonEnabled: Boolean,
+    fontWeight : FontWeight? = null,
     onClick: () -> Unit
 ) {
 
@@ -48,7 +52,7 @@ fun CustomButton(
             )
             .background(
                 color = buttonColor,
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(roundedCornerShape)
             )
             .padding(vertical = textVerticalPadding, horizontal = 10.dp)
 
@@ -58,7 +62,9 @@ fun CustomButton(
             text = text,
             modifier = Modifier,
             color = textColor,
+            lineHeight = 15.sp,
             fontSize = 15.sp,
+            fontWeight = fontWeight
         )
     }
 }

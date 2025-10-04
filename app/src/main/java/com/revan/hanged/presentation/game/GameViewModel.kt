@@ -12,6 +12,7 @@ import com.revan.hanged.domain.model.GameUpdate
 import com.revan.hanged.domain.model.PlayerJoined
 import com.revan.hanged.domain.model.PlayerReadyUpdated
 import com.revan.hanged.domain.model.RoomInfo
+import com.revan.hanged.domain.model.RoomState
 import com.revan.hanged.domain.model.Turn
 import com.revan.hanged.domain.model.toPlayer
 import com.revan.hanged.domain.use_case.GetUserIdFromLocalUseCase
@@ -163,8 +164,9 @@ class GameViewModel @Inject constructor(
     }
 
     private fun leaveRoom(roomInfo: RoomInfo) {
+
         _state.update {
-            it.copy(isGameFinished = false)
+            it.copy(isGameFinished = false, isConfirmExitBottomSheetOpen = false)
         }
         socketHandler.leaveRoom(leave = roomInfo)
         popBackStack()
@@ -247,8 +249,22 @@ class GameViewModel @Inject constructor(
                             turn(safeTurn)
                         }
                     }
+
+                    is GameSocketEvents.RoomStateEvent -> {
+                        event.roomState?.let {safeRoomState ->
+                            updateRoomState(safeRoomState)
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun updateRoomState(roomState : RoomState) {
+        _state.update {
+            it.copy(
+                players = roomState.players
+            )
         }
     }
 
@@ -314,6 +330,27 @@ class GameViewModel @Inject constructor(
         updateDiscoveredLetters(gameUpdate)
         updateKeyColors(gameUpdate)
         updateWrongGuessesCount(gameUpdate)
+        updatePlayerGuessedKey(gameUpdate)
+    }
+
+    private fun updatePlayerGuessedKey(gameUpdate: GameUpdate) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    playerGuessedKey = Triple(
+                        gameUpdate.guessedBy,
+                        gameUpdate.guessedLetter,
+                        gameUpdate.correct
+                    )
+                )
+            }
+            delay(2000)
+            _state.update {
+                it.copy(
+                    playerGuessedKey = null
+                )
+            }
+        }
     }
 
     private fun updateWrongGuessesCount(gameUpdate: GameUpdate) {

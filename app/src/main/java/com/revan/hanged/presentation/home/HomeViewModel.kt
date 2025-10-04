@@ -9,7 +9,6 @@ import com.revan.hanged.domain.model.Room
 import com.revan.hanged.domain.model.RoomInfo
 import com.revan.hanged.domain.model.RoomUpdate
 import com.revan.hanged.domain.model.RoomUpdateType
-import com.revan.hanged.domain.use_case.GetGamesUseCase
 import com.revan.hanged.domain.use_case.GetRoomsUseCase
 import com.revan.hanged.domain.use_case.GetUserIdFromLocalUseCase
 import com.revan.hanged.domain.use_case.GetUsernameFromLocalUseCase
@@ -18,7 +17,8 @@ import com.revan.hanged.domain.use_case.SaveLoginStateUseCase
 import com.revan.hanged.navigation.NavigationCommand
 import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.navigation.ScreenRoute
-import com.revan.hanged.navigation.ScreenRoute.*
+import com.revan.hanged.navigation.ScreenRoute.Home
+import com.revan.hanged.navigation.ScreenRoute.Login
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +30,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val navigator: Navigator,
     private val getRoomsUseCase: GetRoomsUseCase,
-    private val getGamesUseCase: GetGamesUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val saveLoginStateUseCase: SaveLoginStateUseCase,
     private val getUsernameFromLocalUseCase: GetUsernameFromLocalUseCase,
@@ -45,7 +44,6 @@ class HomeViewModel @Inject constructor(
     init {
         getUserDataFromLocal()
         getRooms()
-        getGames()
         observeRoomUpdate()
     }
 
@@ -95,7 +93,7 @@ class HomeViewModel @Inject constructor(
                     saveLoginStateUseCase(false)
                 }
                 navigate(
-                    route = ScreenRoute.Login,
+                    route = Login,
                     popUpTo = Home(username = event.username)
                 )
             }
@@ -103,12 +101,24 @@ class HomeViewModel @Inject constructor(
             HomeEvent.RefreshPage -> {
                 refreshPage()
             }
+
+            is HomeEvent.OnItemSelection ->{
+                onItemSelection(event.tabIndex)
+            }
         }
+    }
+
+    private fun onItemSelection(tabIndex: Int) {
+        _state.update {
+            it.copy(
+                selectedTabIndex = tabIndex
+            )
+        }
+        updateFilteredRooms()
     }
 
     private fun refreshPage() {
         getRooms()
-        getGames()
     }
 
     private fun navigate(route: ScreenRoute, popUpTo: ScreenRoute? = null) {
@@ -127,6 +137,7 @@ class HomeViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val rooms = getRoomsUseCase()
+
             _state.update {
                 it.copy(
                     rooms = rooms,
@@ -135,20 +146,34 @@ class HomeViewModel @Inject constructor(
                     isRefreshing = false
                 )
             }
+
+            updateFilteredRooms()
         }
 
     }
 
-    fun getGames() {
-        viewModelScope.launch {
-            val games = getGamesUseCase()
-            _state.update {
-                it.copy(
-                    games = games
-                )
-            }
+    private fun updateFilteredRooms () {
+        val selectedRoomStatus = when (state.value.selectedTabIndex) {
+            0 -> RoomStatus.WAITING
+            1 -> RoomStatus.PLAYING
+            2 -> RoomStatus.FULL
+            else -> RoomStatus.WAITING
+        }
+
+        val rooms = _state.value.rooms
+
+        println("ROOMS : $rooms")
+        val filteredRooms = rooms.filter { room ->
+            room.status == selectedRoomStatus
+        }
+
+        _state.update {
+            it.copy(
+                filteredRooms = filteredRooms
+            )
         }
     }
+
 
     fun joinRoom(roomInfo: RoomInfo) {
         viewModelScope.launch {

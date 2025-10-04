@@ -4,16 +4,17 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.revan.hanged.data.dto.GameDTO
-import com.revan.hanged.data.dto.RoomsDTO
-import com.revan.hanged.data.dto.toGame
-import com.revan.hanged.data.dto.toRooms
+import com.revan.hanged.data.remote.dto.GameDTO
+import com.revan.hanged.data.remote.dto.RoomsDTO
+import com.revan.hanged.data.remote.dto.toGame
+import com.revan.hanged.data.remote.dto.toRooms
 import com.revan.hanged.domain.repository.FirebaseRepository
 import com.revan.hanged.domain.model.Game
 import com.revan.hanged.domain.model.Room
 import com.revan.hanged.utils.Constants.FIREBASE_EMAIL
 import com.revan.hanged.utils.Constants.FIREBASE_GAME_COLLECTION
 import com.revan.hanged.utils.Constants.FIREBASE_ROOM_COLLECTION
+import com.revan.hanged.utils.Constants.FIREBASE_UID
 import com.revan.hanged.utils.Constants.FIREBASE_USERNAME
 import com.revan.hanged.utils.Constants.FIREBASE_USER_COLLECTION
 import kotlinx.coroutines.tasks.await
@@ -45,7 +46,7 @@ class FirebaseRepositoryImpl(
                 .createUserWithEmailAndPassword(email, password)
                 .await()
             val user = result.user
-            user?.uid ?: throw Exception("User not found")
+            user?.uid ?: throw Exception("UserDTO not found")
         } catch (e: Exception) {
             throw e
         }
@@ -57,7 +58,7 @@ class FirebaseRepositoryImpl(
                 .signInWithEmailAndPassword(email, password)
                 .await()
             val user = result.user
-            user?.uid ?: throw Exception("User not found")
+            user?.uid ?: throw Exception("UserDTO not found")
         } catch (e: Exception) {
             throw e
         }
@@ -86,7 +87,7 @@ class FirebaseRepositoryImpl(
                 .collection(FIREBASE_USER_COLLECTION)
                 .document(userUid)
                 .set(
-                    mapOf(FIREBASE_USERNAME to username, FIREBASE_EMAIL to email)
+                    mapOf(FIREBASE_USERNAME to username, FIREBASE_EMAIL to email,FIREBASE_UID to userUid)
                 )
                 .await()
         } catch (e: Exception) {

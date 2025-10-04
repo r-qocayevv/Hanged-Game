@@ -21,4 +21,7 @@ sealed class ScreenRoute {
     @Serializable
     data object SplashScreen : ScreenRoute()
 
+    @Serializable
+    data object GameHistory : ScreenRoute()
+
 }

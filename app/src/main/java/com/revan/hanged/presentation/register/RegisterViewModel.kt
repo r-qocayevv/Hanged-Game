@@ -103,7 +103,7 @@ class RegisterViewModel @Inject constructor(
             val userUid = signUpUseCase(email = email, password = password, username = username)
             if (userUid.isNotBlank()) {
                 saveUsernameToFirestore(username = username, userUid = userUid, email = email)
-                navigate(route= ScreenRoute.Home(username), popUpTo = ScreenRoute.Register)
+                navigate(route= ScreenRoute.Login, popUpTo = ScreenRoute.Register)
             }
         }
     }

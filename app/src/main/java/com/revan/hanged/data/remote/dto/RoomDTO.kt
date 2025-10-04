@@ -1,4 +1,4 @@
-package com.revan.hanged.data.dto
+package com.revan.hanged.data.remote.dto
 
 
 import com.google.firebase.Timestamp

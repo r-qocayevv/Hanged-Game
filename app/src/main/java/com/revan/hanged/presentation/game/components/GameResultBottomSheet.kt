@@ -2,9 +2,13 @@ package com.revan.hanged.presentation.game.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.presentation.components.CustomButton
+import com.revan.hanged.presentation.components.CustomWhiteButton
 import com.revan.hanged.ui.theme.LightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,31 +33,38 @@ fun GameResultBottomSheet(
     modifier: Modifier = Modifier,
     headerText: String,
     contentText: String,
-    word : String?,
+    word: String?,
     onClick: () -> Unit
 ) {
     ModalBottomSheet(
         modifier = modifier
             .padding(horizontal = 20.dp)
-            .navigationBarsPadding(),
+            .navigationBarsPadding()
+            .padding(bottom = 8.dp),
         onDismissRequest = { onClick() },
+        shape = RoundedCornerShape(16.dp),
         contentColor = Color(0xFF2E3740),
         content = {
-            GameResultBottomSheetContent(headerText = headerText, contentText = contentText, onClick = onClick, word = word)
+            GameResultBottomSheetContent(
+                headerText = headerText,
+                contentText = contentText,
+                onClick = onClick,
+                word = word
+            )
         }
     )
 }
 
 
 @Composable
-fun GameResultBottomSheetContent (
-    headerText : String,
-    contentText : String,
-    word : String?,
-    onClick : () -> Unit
+fun GameResultBottomSheetContent(
+    headerText: String,
+    contentText: String,
+    word: String?,
+    onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.navigationBarsPadding(),
+        modifier = Modifier.padding(bottom = 15.dp),
         verticalArrangement = Arrangement.spacedBy(36.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -80,16 +92,35 @@ fun GameResultBottomSheetContent (
                 fontWeight = FontWeight.SemiBold
             )
         }
-        CustomButton(
-            text = stringResource(R.string.continue_button),
-            onClick = {
-                onClick()
-            }, isButtonEnabled = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp)
+        Column(
+            modifier = Modifier.height(IntrinsicSize.Max),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomButton(
+                text = "Exit",
+                roundedCornerShape = 15.dp,
+                onClick = {
+                    onClick()
+                },
+                fontWeight = FontWeight.SemiBold,
+                isButtonEnabled = true,
+                textVerticalPadding = 14.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp)
 
-        )
+            )
+            Spacer(Modifier.height(8.dp))
+            CustomWhiteButton(
+                text = stringResource(R.string.view_result),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                fontWeight = FontWeight.SemiBold,
+                textVerticalPadding = 14.dp,
+                onClick = {}
+            )
+        }
     }
 }
 
@@ -98,5 +129,10 @@ fun GameResultBottomSheetContent (
 @Composable
 private fun GameBottomSheetPrev(
 ) {
-    GameResultBottomSheetContent(headerText = "Congrats", contentText = "You guessed the word correctly and won this round!", onClick = {}, word = "Butterfly")
+    GameResultBottomSheetContent(
+        headerText = "Congrats",
+        contentText = "You guessed the word correctly and won this round!",
+        onClick = {},
+        word = "Butterfly"
+    )
 }

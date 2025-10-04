@@ -82,5 +82,10 @@ dependencies {
     implementation(libs.lottie.compose)
     //Data store
     implementation(libs.androidx.datastore.preferences)
-
+    //Retrofit
+    implementation(libs.retrofit)
+    //Gson
+    implementation(libs.gson)
+    //Gson converter
+    implementation(libs.converter.gson)
 }

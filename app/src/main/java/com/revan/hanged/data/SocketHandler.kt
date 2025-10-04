@@ -1,6 +1,7 @@
 package com.revan.hanged.data
 
 import android.util.Log
+import com.revan.hanged.domain.model.RoomState
 import com.revan.hanged.domain.model.GameOver
 import com.revan.hanged.domain.model.GameInfo
 import com.revan.hanged.domain.model.GameSettingsUpdate
@@ -98,6 +99,16 @@ class SocketHandler @Inject constructor(
             Log.d("SOCKET_EVENT", "Turn → $turn")
             scope.launch {
                 _gameSocketEvents.emit(GameSocketEvents.TurnEvent(turn))
+            }
+        }
+
+        socketService.on("roomState") {args ->
+            val dataJson = args.firstOrNull()?.toString() ?: return@on
+            println("ROOM STATE : $dataJson")
+            val roomState : RoomState? = JsonParser.parseFromJson(dataJson)
+            Log.d("SOCKET_EVENT", "GameUpdate → $roomState")
+            scope.launch {
+                _gameSocketEvents.emit(GameSocketEvents.RoomStateEvent(roomState = roomState))
             }
         }
 

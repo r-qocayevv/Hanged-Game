@@ -9,7 +9,8 @@ data class HomeState(
     val username : String = "",
     val userId : String = "",
     val rooms: List<Room> = emptyList(),
-    val games: List<Game> = emptyList(),
+    val filteredRooms : List<Room> = emptyList(),
     val availableRoomCount: Int = 0,
-    val isRefreshing: Boolean = false
+    val isRefreshing: Boolean = false,
+    val selectedTabIndex : Int = 0
 )

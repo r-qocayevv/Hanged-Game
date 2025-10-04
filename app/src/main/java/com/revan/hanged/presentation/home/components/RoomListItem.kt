@@ -26,21 +26,23 @@ import com.revan.hanged.R
 import com.revan.hanged.domain.RoomStatus
 import com.revan.hanged.domain.model.Room
 import com.revan.hanged.domain.model.toJoinRoomInfo
-import com.revan.hanged.presentation.home.HomeEvent
 import com.revan.hanged.presentation.components.CustomButton
+import com.revan.hanged.presentation.home.HomeEvent
 import com.revan.hanged.presentation.home.HomeState
 import com.revan.hanged.ui.theme.LightGray
+import com.revan.hanged.utils.firstCharToUpperCase
 
 @Composable
 fun RoomListItem(
     modifier: Modifier = Modifier,
-    uiState : HomeState,
-    onEvent : (HomeEvent) -> Unit,
-    room : Room
+    uiState: HomeState,
+    onEvent: (HomeEvent) -> Unit,
+    room: Room
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .background(Color(0xFF2E3641), shape = RoundedCornerShape(10.dp))
             .border(1.dp, color = Color(0xFFC5C5C4).copy(0.2f), shape = RoundedCornerShape(10.dp))
             .padding(vertical = 12.dp, horizontal = 16.dp)
@@ -108,7 +110,22 @@ fun RoomListItem(
                     modifier = Modifier.padding(end = 2.dp)
                 )
                 Text(
-                    text = room.difficulty,
+                    text = room.difficulty.firstCharToUpperCase(),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,
+                    color = LightGray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Spacer(Modifier.width(10.dp))
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_language),
+                    contentDescription = null,
+                    tint = LightGray,
+                    modifier = Modifier.padding(end = 2.dp)
+                )
+                Text(
+                    text = room.language.firstCharToUpperCase(),
                     fontWeight = FontWeight.Medium,
                     fontSize = 12.sp,
                     color = LightGray,
@@ -117,14 +134,29 @@ fun RoomListItem(
                 )
             }
         }
-        CustomButton(text = "Join", isButtonEnabled = room.status == RoomStatus.WAITING, onClick = {
-            onEvent(HomeEvent.JoinRoom(roomInfo = room.toJoinRoomInfo(username = uiState.username, userId = uiState.userId)))
-        })
+
+        CustomButton(
+            text = if (room.status == RoomStatus.WAITING) "Join" else room.status.name,
+            isButtonEnabled = room.status == RoomStatus.WAITING,
+            onClick = {
+                onEvent(
+                    HomeEvent.JoinRoom(
+                        roomInfo = room.toJoinRoomInfo(
+                            username = uiState.username,
+                            userId = uiState.userId
+                        )
+                    )
+                )
+            })
     }
 }
 
 @Preview
 @Composable
 private fun RoomListItemPrev() {
-    RoomListItem(room = Room("","hard","Az",4,4,"","Raven`s room", RoomStatus.PLAYING), onEvent = {}, uiState = HomeState())
+    RoomListItem(
+        room = Room("", "hard", "Az", 4, 4, "", "Raven`s room", RoomStatus.PLAYING),
+        onEvent = {},
+        uiState = HomeState()
+    )
 }

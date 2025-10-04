@@ -10,5 +10,6 @@ sealed interface HomeEvent {
     data class LogOut(val username : String) : HomeEvent
     data class OnNavigate (val route : ScreenRoute, val popUpTo : ScreenRoute? = null) : HomeEvent
     object RefreshPage : HomeEvent
+    data class OnItemSelection (val tabIndex : Int): HomeEvent
 
 }

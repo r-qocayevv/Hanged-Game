@@ -7,6 +7,7 @@ data class Game(
     val difficulty: String,
     val language: String,
     val players: List<Player>,
+    val wrongGuesses : Int,
     val roomId: String,
     val roomName: String,
     val winner: Winner?,

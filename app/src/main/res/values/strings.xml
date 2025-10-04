@@ -16,7 +16,7 @@
     <string name="custom_word_here">Custom word here</string>
     <string name="cancel">Cancel</string>
     <string name="ready">Ready</string>
-    <string name="available_room">Available Room (%1$d)</string>
+
     <string name="room_status_guide">Room Status Guide</string>
     <string name="players">Players</string>
     <string name="continue_button">Continue</string>
@@ -33,4 +33,13 @@
     <string name="exit_game">Exit game</string>
     <string name="stay">Stay</string>
     <string name="word">Word : %1$s</string>
+    <string name="total_score">Total Score</string>
+    <string name="there_is_nothing_here">There is nothing here!</string>
+    <string name="your_ranking">Your ranking</string>
+    <string name="view_result">View result</string>
+    <string name="won">Won</string>
+    <string name="lost">Lost</string>
+    <string name="winner">Winner</string>
+    <string name="points">points</string>
+    <string name="eliminated">Eliminated</string>
 </resources>

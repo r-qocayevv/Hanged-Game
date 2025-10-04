@@ -6,6 +6,7 @@ import com.revan.hanged.domain.model.GameSettingsUpdate
 import com.revan.hanged.domain.model.GameUpdate
 import com.revan.hanged.domain.model.PlayerJoined
 import com.revan.hanged.domain.model.PlayerReadyUpdated
+import com.revan.hanged.domain.model.RoomState
 import com.revan.hanged.domain.model.Turn
 
 sealed class GameSocketEvents {
@@ -18,4 +19,5 @@ sealed class GameSocketEvents {
     data class GameSettingsUpdateEvent(val gameSettingsUpdate: GameSettingsUpdate?) : GameSocketEvents()
     data class PlayerEliminatedEvent(val userId : String?) : GameSocketEvents()
     data class GameOverEvent(val gameOver: GameOver?) : GameSocketEvents()
+    data class RoomStateEvent(val roomState : RoomState?) : GameSocketEvents()
 }

@@ -26,5 +26,6 @@ data class GameState(
     val keyColors : List<Pair<String,Color>> = emptyList(),
     val gameResult: GameResult = GameResult.OPPONENT_WINNER,
     val isPlayerBottomSheetOpen : Boolean = false,
-    val isConfirmExitBottomSheetOpen : Boolean = false
+    val isConfirmExitBottomSheetOpen : Boolean = false,
+    val playerGuessedKey : Triple<String, String, Boolean>? = null
 )

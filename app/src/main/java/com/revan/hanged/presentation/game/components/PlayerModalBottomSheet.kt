@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -31,7 +32,8 @@ fun PlayerModalBottomSheet(
 
     ModalBottomSheet(
         containerColor = Color(0xFF2E3740),
-        modifier = modifier.padding(horizontal = 20.dp).navigationBarsPadding(),
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier.padding(horizontal = 20.dp).navigationBarsPadding().padding(bottom = 8.dp),
         onDismissRequest = {
             onDismiss()
         }
@@ -47,7 +49,7 @@ fun PlayerModalBottomSheetContent(
     uiState : GameState,
 ) {
     LazyColumn (
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(bottom = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ){
