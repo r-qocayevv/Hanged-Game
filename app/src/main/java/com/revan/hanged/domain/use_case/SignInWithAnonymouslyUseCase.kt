@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SignInWithAnonymouslyUseCase @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ) {
-    suspend operator fun invoke () {
-        firebaseRepository.signInWithAnonymously()
+    suspend operator fun invoke(): String {
+        return firebaseRepository.signInWithAnonymously()
     }
 }

@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     private val navigator: Navigator,
     private val signInWithEmailUseCase: SignInWithEmailUseCase,
     private val signInWithAnonymouslyUseCase: SignInWithAnonymouslyUseCase,
-    private val getUsernameFomFirestoreUseCase: GetUsernameFomFirestoreUseCase,
+    private val getUsernameFromFirestoreUseCase: GetUsernameFomFirestoreUseCase,
     private val saveUsernameToLocalUseCase: SaveUsernameToLocalUseCase,
     private val saveUserIdToLocalUseCase: SaveUserIdToLocalUseCase,
     private val saveLoginStateUseCase: SaveLoginStateUseCase,
@@ -111,6 +111,8 @@ class LoginViewModel @Inject constructor(
     private fun signInWithAnonymously() {
         viewModelScope.launch {
             val userUid = signInWithAnonymouslyUseCase()
+            navigate(route = ScreenRoute.Home(username = "Guest"), popUpTo = ScreenRoute.Login)
+            saveUserInfoToLocal(username = "Guest", userUid = userUid, isLoggedIn = false)
         }
     }
 
@@ -118,11 +120,11 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(password = newPassword) }
     }
 
-    private fun saveUserInfoToLocal (username : String, userUid : String) {
+    private fun saveUserInfoToLocal(username: String, userUid: String, isLoggedIn: Boolean = true) {
         viewModelScope.launch {
             saveUsernameToLocalUseCase(username = username)
             saveUserIdToLocalUseCase(userId = userUid)
-            saveLoginStateUseCase(isLoggedIn = true)
+            saveLoginStateUseCase(isLoggedIn = isLoggedIn)
         }
     }
 
@@ -132,7 +134,7 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             val userUid = signInWithEmailUseCase(email = email, password = password)
-            val username = getUsernameFomFirestoreUseCase(userUid = userUid)
+            val username = getUsernameFromFirestoreUseCase(userUid = userUid)
             navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
             saveUserInfoToLocal(username = username,userUid = userUid)
         }
