@@ -93,16 +93,18 @@ class FirebaseRepositoryImpl(
 
     }
 
-    //todo try catch-de yazmaq
     override suspend fun getUsernameFromFirestore(userUid: String): String {
+        return try {
+            val userInfo = firestore
+                .collection(FIREBASE_USER_COLLECTION)
+                .document(userUid)
+                .get().await()
 
-        val userInfo = firestore
-            .collection(FIREBASE_USER_COLLECTION)
-            .document(userUid)
-            .get().await()
-
-        return userInfo
-            .getString(FIREBASE_USERNAME) ?: throw Exception("Username not found")
+            userInfo.getString(FIREBASE_USERNAME) ?: throw Exception("Username not found")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
     }
 
     override fun logOut() {

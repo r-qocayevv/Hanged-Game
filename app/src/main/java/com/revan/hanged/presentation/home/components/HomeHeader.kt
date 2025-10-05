@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.revan.hanged.R
 import com.revan.hanged.ui.theme.LightGray
 import com.revan.hanged.utils.clickWithoutRipple
+import com.revan.hanged.utils.firstCharToUpperCase
 
 @Composable
 fun HomeHeader(
@@ -60,9 +61,8 @@ fun HomeHeader(
                 .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
-            //todo
             Text(
-                text = "H",
+                text = username.firstCharToUpperCase().first().toString(),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
