@@ -40,6 +40,7 @@ import com.revan.hanged.domain.model.Winner
 import com.revan.hanged.presentation.game_history.GameHistoryState
 import com.revan.hanged.ui.theme.LightGray
 import com.revan.hanged.ui.theme.Red
+import com.revan.hanged.utils.clickWithoutRipple
 import com.revan.hanged.utils.firstCharToUpperCase
 import com.revan.hanged.utils.formatIsoToCustom
 
@@ -48,7 +49,8 @@ import com.revan.hanged.utils.formatIsoToCustom
 fun GameDetailBottomSheet(
     modifier: Modifier = Modifier,
     uiState: GameHistoryState,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    changeWordVisibility : () -> Unit
 ) {
 
     val sheetState = rememberModalBottomSheetState(
@@ -71,7 +73,10 @@ fun GameDetailBottomSheet(
                 myId = uiState.myId,
                 game = uiState.selectedGame,
                 activePlayers = uiState.activePlayer,
-                eliminatedPlayers = uiState.eliminatedPlayers
+                eliminatedPlayers = uiState.eliminatedPlayers,
+                isWordVisible = uiState.isWordVisible,
+                changeWordVisibility = changeWordVisibility
+
             )
         }
     )
@@ -82,8 +87,10 @@ fun GameDetailBottomSheetContent(
     modifier: Modifier = Modifier,
     activePlayers: List<Player>,
     eliminatedPlayers: List<Player>,
+    isWordVisible: Boolean,
     myId: String,
-    game: Game
+    game: Game,
+    changeWordVisibility : () -> Unit
 ) {
 
     val areYouWinner = game.winner?.id == myId
@@ -161,15 +168,13 @@ fun GameDetailBottomSheetContent(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            //todo *
                             Text(
-                                text = game.word.uppercase(),
+                                text = if (isWordVisible) game.word.uppercase() else "*".repeat(game.word.length),
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 24.sp,
                                 lineHeight = 24.sp,
                                 color = Color.White,
                             )
-                            //todo *
                             Text(
                                 text = "${game.language.firstCharToUpperCase()} | ${game.difficulty.firstCharToUpperCase()}",
                                 fontWeight = FontWeight.Medium,
@@ -179,12 +184,17 @@ fun GameDetailBottomSheetContent(
                             )
                         }
                         Spacer(Modifier.width(8.dp))
-                        //todo
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_show_password),
+                            imageVector = ImageVector.vectorResource(if (isWordVisible) R.drawable.ic_hide_password else R.drawable.ic_show_password),
                             contentDescription = null,
                             tint = Color.Unspecified,
-                            modifier = Modifier.padding(top = 6.dp)
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .clickWithoutRipple(
+                                    onClick = {
+                                        changeWordVisibility()
+                                    }
+                                )
                         )
                     }
                 }
@@ -205,7 +215,6 @@ fun GameDetailBottomSheetContent(
                         val labelValue = when (it) {
                             0 -> (game.players.find { it.id == myId }?.score ?: 0).toString()
                             1 -> game.players.size.toString()
-
                             2 -> "${game.wrongGuesses}/10"
                             else -> ""
                         }
@@ -295,6 +304,7 @@ fun GameDetailBottomSheetContent(
                     Spacer(Modifier.width(4.dp))
                     Text(
                         text = "Active players (${activePlayers.size})",
+                        color = LightGray,
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
                     )
@@ -322,6 +332,7 @@ fun GameDetailBottomSheetContent(
                     Text(
                         text = "Eliminated players (${eliminatedPlayers.size})",
                         fontWeight = FontWeight.Medium,
+                        color = LightGray,
                         fontSize = 12.sp,
                     )
                 }
@@ -351,6 +362,8 @@ private fun GameDetailBottomSheetPrev() {
             word = "word",
             players = emptyList(),
             wrongGuesses = 0
-        ), myId = "123", eliminatedPlayers = emptyList(), activePlayers = emptyList()
+        ), myId = "123", eliminatedPlayers = emptyList(), activePlayers = emptyList(),
+        isWordVisible = false,
+        changeWordVisibility = {}
     )
 }

@@ -7,4 +7,5 @@ sealed interface GameHistoryEvent {
     data class OnTabSelected(val index: Int) : GameHistoryEvent
     data class OnGameSelected (val game : Game) : GameHistoryEvent
     data object CloseGameDetailBottomSheet : GameHistoryEvent
+    data object ChangeWordVisibility : GameHistoryEvent
 }

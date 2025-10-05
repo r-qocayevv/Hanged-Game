@@ -68,7 +68,6 @@ fun GameDetailPlayersCustomBox(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     color = Color.White,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
             Spacer(Modifier.width(9.dp))

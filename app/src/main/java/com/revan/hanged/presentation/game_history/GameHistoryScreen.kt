@@ -79,6 +79,9 @@ fun GameHistoryScreen(
                 uiState = uiState,
                 onDismiss = {
                     onEvent(GameHistoryEvent.CloseGameDetailBottomSheet)
+                },
+                changeWordVisibility = {
+                    onEvent(GameHistoryEvent.ChangeWordVisibility)
                 }
             )
         }

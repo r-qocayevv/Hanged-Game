@@ -274,7 +274,8 @@ class GameViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     isGameFinished = true,
-                    gameResult = GameResult.YOU_ELIMINATED
+                    gameResult = GameResult.YOU_ELIMINATED,
+                    word = null
                 )
             }
         } else {

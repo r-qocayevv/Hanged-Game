@@ -124,6 +124,18 @@ class GameHistoryViewModel @Inject constructor(
             GameHistoryEvent.CloseGameDetailBottomSheet -> {
                 closeGameDetailBottomSheet()
             }
+
+            GameHistoryEvent.ChangeWordVisibility -> {
+                changeWordVisibility()
+            }
+        }
+    }
+
+    private fun changeWordVisibility() {
+        _state.update {
+            it.copy(
+                isWordVisible = !_state.value.isWordVisible
+            )
         }
     }
 

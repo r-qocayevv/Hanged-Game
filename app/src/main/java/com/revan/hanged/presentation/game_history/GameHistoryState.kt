@@ -7,6 +7,7 @@ import com.revan.hanged.domain.model.User
 
 data class GameHistoryState(
     val isLoading: Boolean = false,
+    val isWordVisible : Boolean = false,
     val myId: String = "",
     val myUsername : String = "",
     val games: List<Game> = emptyList(),
