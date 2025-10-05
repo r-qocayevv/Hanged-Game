@@ -3,6 +3,7 @@ package com.revan.hanged.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.revan.hanged.Toaster
 import com.revan.hanged.data.local.HangedDataStore
 import com.revan.hanged.data.remote.HangedAPI
 import com.revan.hanged.data.repository.DataStorePreferencesRepositoryImpl
@@ -97,6 +98,12 @@ object AppModule {
     @Singleton
     fun provideNavigator(): Navigator {
         return Navigator()
+    }
+
+    @Provides
+    @Singleton
+    fun provideToaster(): Toaster {
+        return Toaster()
     }
 
     @Provides

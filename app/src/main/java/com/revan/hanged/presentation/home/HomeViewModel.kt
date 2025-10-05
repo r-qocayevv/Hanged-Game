@@ -2,6 +2,7 @@ package com.revan.hanged.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revan.hanged.Toaster
 import com.revan.hanged.data.HomeSocketEvents
 import com.revan.hanged.data.SocketHandler
 import com.revan.hanged.domain.RoomStatus
@@ -29,6 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val navigator: Navigator,
+    private val toaster: Toaster,
     private val getRoomsUseCase: GetRoomsUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val saveLoginStateUseCase: SaveLoginStateUseCase,
@@ -88,24 +90,34 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeEvent.LogOut -> {
-                viewModelScope.launch {
-                    logoutUseCase()
-                    saveLoginStateUseCase(false)
-                }
-                navigate(
-                    route = Login,
-                    popUpTo = Home(username = event.username)
-                )
+                logOut(username = event.username)
+
             }
 
             HomeEvent.RefreshPage -> {
                 refreshPage()
             }
 
-            is HomeEvent.OnItemSelection ->{
+            is HomeEvent.OnItemSelection -> {
                 onItemSelection(event.tabIndex)
             }
         }
+    }
+
+    private fun logOut(username: String) {
+        viewModelScope.launch {
+            try {
+                logoutUseCase()
+                saveLoginStateUseCase(false)
+                navigate(
+                    route = Login,
+                    popUpTo = Home(username = username)
+                )
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+            }
+        }
+
     }
 
     private fun onItemSelection(tabIndex: Int) {
@@ -136,23 +148,27 @@ class HomeViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val rooms = getRoomsUseCase()
+            try {
+                val rooms = getRoomsUseCase()
 
-            _state.update {
-                it.copy(
-                    rooms = rooms,
-                    availableRoomCount = rooms.size,
-                    isLoading = false,
-                    isRefreshing = false
-                )
+                _state.update {
+                    it.copy(
+                        rooms = rooms,
+                        availableRoomCount = rooms.size,
+                        isLoading = false,
+                        isRefreshing = false
+                    )
+                }
+
+                updateFilteredRooms()
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
             }
-
-            updateFilteredRooms()
         }
 
     }
 
-    private fun updateFilteredRooms () {
+    private fun updateFilteredRooms() {
         val selectedRoomStatus = when (state.value.selectedTabIndex) {
             0 -> RoomStatus.WAITING
             1 -> RoomStatus.PLAYING
@@ -162,7 +178,6 @@ class HomeViewModel @Inject constructor(
 
         val rooms = _state.value.rooms
 
-        println("ROOMS : $rooms")
         val filteredRooms = rooms.filter { room ->
             room.status == selectedRoomStatus
         }

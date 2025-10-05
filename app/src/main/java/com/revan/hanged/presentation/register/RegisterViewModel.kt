@@ -2,6 +2,7 @@ package com.revan.hanged.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revan.hanged.Toaster
 import com.revan.hanged.domain.use_case.SaveUsernameToFirestoreUseCase
 import com.revan.hanged.domain.use_case.SignUpUseCase
 import com.revan.hanged.navigation.NavigationCommand
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val navigator : Navigator,
+    private val toaster: Toaster,
     private val signUpUseCase: SignUpUseCase,
     private val saveUsernameToFirestoreUseCase: SaveUsernameToFirestoreUseCase
 ) : ViewModel() {
@@ -98,19 +100,32 @@ class RegisterViewModel @Inject constructor(
         val password = _state.value.password
         val username = _state.value.username
 
-        //TODO CHECK NETWORK CONNECTION
+
         viewModelScope.launch {
-            val userUid = signUpUseCase(email = email, password = password, username = username)
-            if (userUid.isNotBlank()) {
-                saveUsernameToFirestore(username = username, userUid = userUid, email = email)
-                navigate(route= ScreenRoute.Login, popUpTo = ScreenRoute.Register)
+            try {
+                val userUid = signUpUseCase(email = email, password = password, username = username)
+                if (userUid.isNotBlank()) {
+                    saveUsernameToFirestore(username = username, userUid = userUid, email = email)
+                    navigate(route = ScreenRoute.Login, popUpTo = ScreenRoute.Register)
+                }
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
             }
+
         }
     }
 
     private fun saveUsernameToFirestore (username : String, userUid : String,email : String) {
         viewModelScope.launch {
-            saveUsernameToFirestoreUseCase(username = username, userUid = userUid, email = email)
+            try {
+                saveUsernameToFirestoreUseCase(
+                    username = username,
+                    userUid = userUid,
+                    email = email
+                )
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+            }
         }
     }
 

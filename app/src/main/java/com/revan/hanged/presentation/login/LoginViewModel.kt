@@ -2,6 +2,7 @@ package com.revan.hanged.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revan.hanged.Toaster
 import com.revan.hanged.domain.use_case.GetUsernameFomFirestoreUseCase
 import com.revan.hanged.domain.use_case.IsLoggedInUseCase
 import com.revan.hanged.domain.use_case.SaveLoginStateUseCase
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val navigator: Navigator,
+    private val toaster: Toaster,
     private val signInWithEmailUseCase: SignInWithEmailUseCase,
     private val signInWithAnonymouslyUseCase: SignInWithAnonymouslyUseCase,
     private val getUsernameFromFirestoreUseCase: GetUsernameFomFirestoreUseCase,
@@ -83,9 +85,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun navigate(route: ScreenRoute,popUpTo: ScreenRoute?) {
+    private fun navigate(route: ScreenRoute, popUpTo: ScreenRoute?) {
         viewModelScope.launch {
-            navigator.sendNavigation(NavigationCommand.OnNavigate(route = route, popUpTo = popUpTo ))
+            navigator.sendNavigation(NavigationCommand.OnNavigate(route = route, popUpTo = popUpTo))
         }
     }
 
@@ -110,9 +112,13 @@ class LoginViewModel @Inject constructor(
 
     private fun signInWithAnonymously() {
         viewModelScope.launch {
-            val userUid = signInWithAnonymouslyUseCase()
-            navigate(route = ScreenRoute.Home(username = "Guest"), popUpTo = ScreenRoute.Login)
-            saveUserInfoToLocal(username = "Guest", userUid = userUid, isLoggedIn = false)
+            try {
+                val userUid = signInWithAnonymouslyUseCase()
+                navigate(route = ScreenRoute.Home(username = "Guest"), popUpTo = ScreenRoute.Login)
+                saveUserInfoToLocal(username = "Guest", userUid = userUid, isLoggedIn = false)
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+            }
         }
     }
 
@@ -122,9 +128,13 @@ class LoginViewModel @Inject constructor(
 
     private fun saveUserInfoToLocal(username: String, userUid: String, isLoggedIn: Boolean = true) {
         viewModelScope.launch {
-            saveUsernameToLocalUseCase(username = username)
-            saveUserIdToLocalUseCase(userId = userUid)
-            saveLoginStateUseCase(isLoggedIn = isLoggedIn)
+            try {
+                saveUsernameToLocalUseCase(username = username)
+                saveUserIdToLocalUseCase(userId = userUid)
+                saveLoginStateUseCase(isLoggedIn = isLoggedIn)
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+            }
         }
     }
 
@@ -132,15 +142,18 @@ class LoginViewModel @Inject constructor(
         val email = _state.value.email
         val password = _state.value.password
 
+
         viewModelScope.launch {
-            val userUid = signInWithEmailUseCase(email = email, password = password)
-            val username = getUsernameFromFirestoreUseCase(userUid = userUid)
-            navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
-            saveUserInfoToLocal(username = username,userUid = userUid)
+            try {
+                val userUid = signInWithEmailUseCase(email = email, password = password)
+                val username = getUsernameFromFirestoreUseCase(userUid = userUid)
+                navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
+                saveUserInfoToLocal(username = username, userUid = userUid)
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+            }
         }
     }
-
-
 
 
 }

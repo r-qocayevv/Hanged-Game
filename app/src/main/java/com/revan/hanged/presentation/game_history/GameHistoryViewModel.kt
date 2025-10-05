@@ -2,9 +2,8 @@ package com.revan.hanged.presentation.game_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revan.hanged.Toaster
 import com.revan.hanged.domain.model.Game
-import com.revan.hanged.domain.model.User
-import com.revan.hanged.domain.use_case.GetGameDetailUseCase
 import com.revan.hanged.domain.use_case.GetGamesUseCase
 import com.revan.hanged.domain.use_case.GetLeaderboardUseCase
 import com.revan.hanged.domain.use_case.GetUserDetailUseCase
@@ -22,11 +21,11 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class GameHistoryViewModel @Inject constructor(
     private val navigator: Navigator,
+    private val toaster: Toaster,
     private val getUserIdFromLocalUseCase: GetUserIdFromLocalUseCase,
     private val getUsernameFromLocalUseCase: GetUsernameFromLocalUseCase,
     private val getGamesUseCase: GetGamesUseCase,
     private val getLeaderboardUseCase: GetLeaderboardUseCase,
-    private val getGameDetailUseCase: GetGameDetailUseCase,
     private val getUserDetailUseCase: GetUserDetailUseCase
 
 ) : ViewModel() {
@@ -38,13 +37,11 @@ class GameHistoryViewModel @Inject constructor(
         getMyOwnId()
         getMyOwnName()
         getGames()
-
-        getGameDetail()
     }
 
-    private fun getMyOwnName () {
+    private fun getMyOwnName() {
         viewModelScope.launch {
-            getUsernameFromLocalUseCase().collect {myUsername ->
+            getUsernameFromLocalUseCase().collect { myUsername ->
                 myUsername?.let { safeUsername ->
                     _state.update {
                         it.copy(
@@ -73,35 +70,41 @@ class GameHistoryViewModel @Inject constructor(
         }
     }
 
-    private fun getMyOwnDetails(id : String) {
+    private fun getMyOwnDetails(id: String) {
         _state.update {
             it.copy(
                 isLoading = true
             )
         }
         viewModelScope.launch {
-            val user = getUserDetailUseCase(id)
-            _state.update {
-                it.copy(
-                    myOwnDetails = user,
-                    isLoading = false
-                )
+            try {
+                val user = getUserDetailUseCase(id)
+                _state.update {
+                    it.copy(
+                        myOwnDetails = user,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
             }
         }
     }
 
-    private fun getGameDetail() {
-    }
 
-    private fun getLeaderboard(myId : String) {
+    private fun getLeaderboard(myId: String) {
         viewModelScope.launch {
-            val leaderboard = getLeaderboardUseCase()
-            val myRank = leaderboard.find { it.userId == myId }
-            _state.update {
-                it.copy(
-                    leaderboard = leaderboard,
-                    myRank = myRank
-                )
+            try {
+                val leaderboard = getLeaderboardUseCase()
+                val myRank = leaderboard.find { it.userId == myId }
+                _state.update {
+                    it.copy(
+                        leaderboard = leaderboard,
+                        myRank = myRank
+                    )
+                }
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
             }
         }
     }
@@ -170,11 +173,15 @@ class GameHistoryViewModel @Inject constructor(
 
     private fun getGames() {
         viewModelScope.launch {
-            val games = getGamesUseCase()
-            _state.update {
-                it.copy(
-                    games = games
-                )
+            try {
+                val games = getGamesUseCase()
+                _state.update {
+                    it.copy(
+                        games = games
+                    )
+                }
+            } catch (e: Exception) {
+                toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
             }
         }
     }

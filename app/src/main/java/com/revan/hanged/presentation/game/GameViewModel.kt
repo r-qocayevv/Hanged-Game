@@ -152,7 +152,6 @@ class GameViewModel @Inject constructor(
     }
 
     private fun onOpenGuessWord() {
-        println("onOpenGuessWord called ${_state.value.isGuessWordOpen}")
         _state.update {
             it.copy(
                 isGuessWordOpen = !it.isGuessWordOpen

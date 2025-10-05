@@ -22,16 +22,23 @@ class FirebaseRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : FirebaseRepository {
     override suspend fun getRooms(): List<Room> {
-        val snapshot = firestore.collection(FIREBASE_ROOM_COLLECTION).get().await()
-        val roomDto = snapshot.toObjects(RoomsDTO::class.java)
-        return roomDto.map { it.toRooms() }.sortedBy { it.status }
-
+        try {
+            val snapshot = firestore.collection(FIREBASE_ROOM_COLLECTION).get().await()
+            val roomDto = snapshot.toObjects(RoomsDTO::class.java)
+            return roomDto.map { it.toRooms() }.sortedBy { it.status }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
     override suspend fun getGames(): List<Game> {
-        val snapshot = firestore.collection(FIREBASE_GAME_COLLECTION).get().await()
-        val gameDTO = snapshot.toObjects(GameDTO::class.java)
-        return gameDTO.map { it.toGame() }
+        try {
+            val snapshot = firestore.collection(FIREBASE_GAME_COLLECTION).get().await()
+            val gameDTO = snapshot.toObjects(GameDTO::class.java)
+            return gameDTO.map { it.toGame() }
+        } catch (e: Exception) {
+            throw e
+        }
 
     }
 
@@ -44,7 +51,7 @@ class FirebaseRepositoryImpl(
                 .createUserWithEmailAndPassword(email, password)
                 .await()
             val user = result.user
-            user?.uid ?: throw Exception("UserDTO not found")
+            user?.uid ?: throw Exception("User not found")
         } catch (e: Exception) {
             throw e
         }
@@ -56,7 +63,7 @@ class FirebaseRepositoryImpl(
                 .signInWithEmailAndPassword(email, password)
                 .await()
             val user = result.user
-            user?.uid ?: throw Exception("UserDTO not found")
+            user?.uid ?: throw Exception("User not found")
         } catch (e: Exception) {
             throw e
         }
@@ -68,7 +75,7 @@ class FirebaseRepositoryImpl(
                 .signInAnonymously()
                 .await()
             val user = result.user
-            user?.uid ?: throw Exception("UserDTO not found")
+            user?.uid ?: throw Exception("User not found")
         } catch (e: Exception) {
             throw e
         }
@@ -108,7 +115,11 @@ class FirebaseRepositoryImpl(
     }
 
     override fun logOut() {
-        firebaseAuth.signOut()
+        try {
+            firebaseAuth.signOut()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
 }
