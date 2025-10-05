@@ -1,17 +1,19 @@
 package com.revan.hanged.presentation.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -28,6 +30,7 @@ fun CustomButton(
     textVerticalPadding: Dp = 6.dp,
     isButtonEnabled: Boolean,
     fontWeight : FontWeight? = null,
+    isLoading: Boolean = false,
     onClick: () -> Unit
 ) {
 
@@ -58,19 +61,29 @@ fun CustomButton(
 
 
     ) {
-        Text(
-            text = text,
-            modifier = Modifier,
-            color = textColor,
-            lineHeight = 15.sp,
-            fontSize = 15.sp,
-            fontWeight = fontWeight
-        )
+        AnimatedContent(targetState = isLoading) { isLoading ->
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White, modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .size(15.dp)
+                )
+            } else {
+                Text(
+                    text = text,
+                    modifier = Modifier,
+                    color = textColor,
+                    lineHeight = 15.sp,
+                    fontSize = 15.sp,
+                    fontWeight = fontWeight
+                )
+            }
+        }
     }
 }
 
 @Preview
 @Composable
 private fun CustomButtonPrev() {
-    CustomButton(text = "Sign in", onClick = {}, isButtonEnabled = false)
+    CustomButton(text = "Sign in", onClick = {}, isButtonEnabled = false, isLoading = true)
 }

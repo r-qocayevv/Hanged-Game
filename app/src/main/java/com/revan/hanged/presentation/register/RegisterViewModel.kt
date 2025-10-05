@@ -102,14 +102,17 @@ class RegisterViewModel @Inject constructor(
 
 
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             try {
                 val userUid = signUpUseCase(email = email, password = password, username = username)
                 if (userUid.isNotBlank()) {
                     saveUsernameToFirestore(username = username, userUid = userUid, email = email)
                     navigate(route = ScreenRoute.Login, popUpTo = ScreenRoute.Register)
+                    _state.update { it.copy(isLoading = false) }
                 }
             } catch (e: Exception) {
                 toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+                _state.update { it.copy(isLoading = false) }
             }
 
         }

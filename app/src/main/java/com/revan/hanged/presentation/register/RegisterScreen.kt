@@ -139,6 +139,7 @@ fun RegisterScreen(
                     textVerticalPadding = 15.dp,
                     text = stringResource(R.string.sign_up),
                     isButtonEnabled = uiState.isButtonEnabled,
+                    isLoading = uiState.isLoading,
                     onClick = {
                         onEvent(RegisterEvent.SignUp)
                     })

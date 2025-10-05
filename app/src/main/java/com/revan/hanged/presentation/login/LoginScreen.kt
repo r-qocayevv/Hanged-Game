@@ -128,6 +128,7 @@ fun LoginScreen(
                     textVerticalPadding = 15.dp,
                     text = stringResource(R.string.sign_in),
                     isButtonEnabled = uiState.isButtonEnabled,
+                    isLoading = uiState.isLoadingForSignInWithEmail,
                     onClick = {
                         onEvent(LoginEvent.SignInWithEmail)
                     })
@@ -135,7 +136,9 @@ fun LoginScreen(
                 Spacer(Modifier.height(11.dp))
                 OrDivider()
                 Spacer(Modifier.height(11.dp))
-                ContinueAsGuestButton(onClick = {
+                ContinueAsGuestButton(
+                    isLoading = uiState.isLoadingForSignInWithGuest,
+                    onClick = {
                     onEvent(LoginEvent.SignInWithAnonymously)
                 })
             }

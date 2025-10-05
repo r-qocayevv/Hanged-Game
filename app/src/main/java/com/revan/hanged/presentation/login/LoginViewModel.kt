@@ -111,13 +111,16 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun signInWithAnonymously() {
+        _state.update { it.copy(isLoadingForSignInWithGuest = true) }
         viewModelScope.launch {
             try {
                 val userUid = signInWithAnonymouslyUseCase()
                 navigate(route = ScreenRoute.Home(username = "Guest"), popUpTo = ScreenRoute.Login)
                 saveUserInfoToLocal(username = "Guest", userUid = userUid, isLoggedIn = false)
+                _state.update { it.copy(isLoadingForSignInWithGuest = false) }
             } catch (e: Exception) {
                 toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+                _state.update { it.copy(isLoadingForSignInWithGuest = false) }
             }
         }
     }
@@ -144,13 +147,16 @@ class LoginViewModel @Inject constructor(
 
 
         viewModelScope.launch {
+            _state.update { it.copy(isLoadingForSignInWithEmail = true) }
             try {
                 val userUid = signInWithEmailUseCase(email = email, password = password)
                 val username = getUsernameFromFirestoreUseCase(userUid = userUid)
                 navigate(route = ScreenRoute.Home(username = username), popUpTo = ScreenRoute.Login)
                 saveUserInfoToLocal(username = username, userUid = userUid)
+                _state.update { it.copy(isLoadingForSignInWithEmail = false) }
             } catch (e: Exception) {
                 toaster.emitToastMessage(message = e.localizedMessage ?: "Unknown error")
+                _state.update { it.copy(isLoadingForSignInWithEmail = false) }
             }
         }
     }
