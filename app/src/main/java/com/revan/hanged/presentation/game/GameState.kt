@@ -27,5 +27,6 @@ data class GameState(
     val gameResult: GameResult = GameResult.OPPONENT_WINNER,
     val isPlayerBottomSheetOpen : Boolean = false,
     val isConfirmExitBottomSheetOpen : Boolean = false,
-    val playerGuessedKey : Triple<String, String, Boolean>? = null
+    val playerGuessedKey: Triple<String, String, Boolean>? = null,
+    val isWordVisible: Boolean = false
 )

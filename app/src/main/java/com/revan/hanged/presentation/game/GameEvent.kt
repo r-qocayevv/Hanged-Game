@@ -12,5 +12,6 @@ sealed interface GameEvent {
     data class OnGuessWord (val roomInfo: RoomInfo) : GameEvent
     object ChangePlayerBottomSheetState : GameEvent
     object ChangeConfirmExitBottomSheetState : GameEvent
+    data object ChangeWordVisibility : GameEvent
 
 }

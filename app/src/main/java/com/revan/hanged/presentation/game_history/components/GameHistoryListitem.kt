@@ -80,7 +80,7 @@ fun GameHistoryListItem(
         Column(
             verticalArrangement = Arrangement.spacedBy(18.dp),
             modifier = Modifier
-                .padding(vertical = 12.dp)
+                .padding(top = 11.dp, bottom = 8.dp)
                 .padding(start = 24.dp, end = 8.dp)
         ) {
 
@@ -94,8 +94,9 @@ fun GameHistoryListItem(
                 ) {
 
                     Text(
-                        text = game.word,
+                        text = game.word.firstCharToUpperCase(),
                         fontSize = 24.sp,
+                        lineHeight = 24.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
                     )
@@ -103,6 +104,7 @@ fun GameHistoryListItem(
                     Text(
                         text = game.roomName,
                         fontSize = 10.sp,
+                        lineHeight = 10.sp,
                         color = LightGray
                     )
                 }
@@ -113,6 +115,7 @@ fun GameHistoryListItem(
                     Text(
                         text = "+${if (areYouWinner) game.winner.score else 0}",
                         fontSize = 16.sp,
+                        lineHeight = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = LightGray
                     )
@@ -237,6 +240,7 @@ fun GameHistoryListItem(
                                 text = initial.name.take(1).uppercase(),
                                 color = DarkGray,
                                 fontSize = 10.sp,
+                                lineHeight = 10.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -259,6 +263,7 @@ fun GameHistoryListItem(
                                 text = "+$remaining",
                                 color = DarkGray,
                                 fontSize = 10.sp,
+                                lineHeight = 10.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }

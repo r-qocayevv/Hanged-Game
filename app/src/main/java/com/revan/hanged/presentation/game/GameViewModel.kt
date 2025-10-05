@@ -83,6 +83,18 @@ class GameViewModel @Inject constructor(
             GameEvent.ChangeConfirmExitBottomSheetState -> {
                 changeConfirmExitBottomSheetState()
             }
+
+            GameEvent.ChangeWordVisibility -> {
+                changeWordVisibility()
+            }
+        }
+    }
+
+    private fun changeWordVisibility() {
+        _state.update {
+            it.copy(
+                isWordVisible = !_state.value.isWordVisible
+            )
         }
     }
 

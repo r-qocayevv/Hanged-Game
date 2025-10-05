@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -66,11 +67,13 @@ fun GameHistoryScreen(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.clickWithoutRipple(
-                    onClick = {
-                        onEvent(GameHistoryEvent.ToBack)
-                    }
-                )
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickWithoutRipple(
+                        onClick = {
+                            onEvent(GameHistoryEvent.ToBack)
+                        }
+                    )
             )
         }
 
@@ -113,7 +116,7 @@ fun GameHistoryScreen(
                     selectedTabIndex = uiState.selectedTabIndex,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 10.dp),
+                        .padding(bottom = 10.dp, top = 4.dp),
                     onItemSelection = {
                         onEvent(GameHistoryEvent.OnTabSelected(it))
                     })
@@ -129,7 +132,7 @@ fun GameHistoryScreen(
                             showGameDetailDialog = {
                                 onEvent(GameHistoryEvent.OnGameSelected(game = game))
                             })
-                        Spacer(Modifier.height(4.dp))
+                        Spacer(Modifier.height(8.dp))
                     }
                 }
 

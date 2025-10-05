@@ -65,7 +65,8 @@ fun GameScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = Color(0xFF1F262D))
-            .navigationBarsPadding().then(Modifier.blur(if(uiState.isConfirmExitBottomSheetOpen || uiState.isPlayerBottomSheetOpen || uiState.isGameFinished) 8.dp else 0.dp)),
+            .navigationBarsPadding()
+            .then(Modifier.blur(if (uiState.isConfirmExitBottomSheetOpen || uiState.isPlayerBottomSheetOpen || uiState.isGameFinished) 8.dp else 0.dp)),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         item {
@@ -89,7 +90,12 @@ fun GameScreen(
                 GameResultBottomSheet(headerText = headerText, contentText = contentText, onClick = {
                     onEvent(GameEvent.LeaveRoom(roomInfo = roomInfo))
                 },
-                    word = uiState.word ?: "")
+                    word = uiState.word ?: "",
+                    changeWordVisibility = {
+                        onEvent(GameEvent.ChangeWordVisibility)
+                    },
+                    isWordVisible = uiState.isWordVisible
+                )
             }
 
             if (uiState.isPlayerBottomSheetOpen) {

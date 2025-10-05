@@ -1,5 +1,6 @@
 package com.revan.hanged.presentation.game_history.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,16 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,7 @@ fun MyOwnGameHistoryInfo(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 10.dp)
+            .padding(horizontal = 16.dp, vertical = 10.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -55,10 +54,9 @@ fun MyOwnGameHistoryInfo(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.CenterEnd
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_cup),
+            Image(
+                painter = painterResource(R.drawable.ic_cup),
                 contentDescription = null,
-                tint = Color.Unspecified,
             )
         }
 
@@ -74,6 +72,7 @@ fun MyOwnGameHistoryInfo(
                 Text(
                     text = stringResource(R.string.total_score),
                     fontSize = 11.sp,
+                    lineHeight = 11.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White
                 )
@@ -81,6 +80,7 @@ fun MyOwnGameHistoryInfo(
                 Text(
                     text = (myOwnDetails?.totalScore ?: 0).toString(),
                     fontSize = 24.sp,
+                    lineHeight = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
@@ -98,7 +98,7 @@ fun MyOwnGameHistoryInfo(
                                 shape = RoundedCornerShape(8.dp)
                             )
                             .padding(
-                                vertical = 5.dp,
+                                vertical = 4.dp,
                                 horizontal = 8.dp
                             )
                             .weight(1f),
@@ -121,12 +121,14 @@ fun MyOwnGameHistoryInfo(
                         Text(
                             text = label,
                             fontSize = 10.sp,
+                            lineHeight = 10.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.White
                         )
                         Text(
                             text = count.toString(),
                             fontSize = 16.sp,
+                            lineHeight = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
