@@ -19,7 +19,6 @@ import com.revan.hanged.domain.use_case.GetUserIdFromLocalUseCase
 import com.revan.hanged.domain.use_case.GetUsernameFromLocalUseCase
 import com.revan.hanged.navigation.NavigationCommand
 import com.revan.hanged.navigation.Navigator
-import com.revan.hanged.navigation.ScreenRoute
 import com.revan.hanged.ui.theme.Red
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -138,12 +137,6 @@ class GameViewModel @Inject constructor(
                     it.copy(username = username)
                 }
             }
-        }
-    }
-
-    private fun navigate(route: ScreenRoute, popUpTo: ScreenRoute? = null) {
-        viewModelScope.launch {
-            navigator.sendNavigation(NavigationCommand.OnNavigate(route = route, popUpTo = popUpTo))
         }
     }
 

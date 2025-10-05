@@ -21,6 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +52,7 @@ fun GameHistoryListItem(
     showGameDetailDialog : () -> Unit
 ) {
     val areYouWinner = game.winner != null && game.winner.id == myId
+    var isWordVisible by rememberSaveable { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -93,13 +98,31 @@ fun GameHistoryListItem(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
 
-                    Text(
-                        text = game.word.firstCharToUpperCase(),
-                        fontSize = 24.sp,
-                        lineHeight = 24.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = if (isWordVisible) game.word.firstCharToUpperCase() else "*".repeat(
+                                game.word.length
+                            ),
+                            fontSize = 24.sp,
+                            lineHeight = 24.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+
+                        Icon(
+                            imageVector = ImageVector.vectorResource(if (isWordVisible) R.drawable.ic_hide_password else R.drawable.ic_show_password),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                            modifier = Modifier.clickWithoutRipple(
+                                onClick = {
+                                    isWordVisible = !isWordVisible
+                                }
+                            )
+                        )
+                    }
 
                     Text(
                         text = game.roomName,
