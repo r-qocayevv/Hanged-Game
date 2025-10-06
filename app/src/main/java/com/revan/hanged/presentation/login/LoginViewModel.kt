@@ -2,7 +2,6 @@ package com.revan.hanged.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.revan.hanged.Toaster
 import com.revan.hanged.domain.use_case.GetUsernameFomFirestoreUseCase
 import com.revan.hanged.domain.use_case.IsLoggedInUseCase
 import com.revan.hanged.domain.use_case.SaveLoginStateUseCase
@@ -13,6 +12,7 @@ import com.revan.hanged.domain.use_case.SignInWithEmailUseCase
 import com.revan.hanged.navigation.NavigationCommand
 import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.navigation.ScreenRoute
+import com.revan.hanged.utils.Toaster
 import com.revan.hanged.utils.isValidEmail
 import com.revan.hanged.utils.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel

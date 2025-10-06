@@ -3,7 +3,6 @@ package com.revan.hanged.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.revan.hanged.Toaster
 import com.revan.hanged.data.local.HangedDataStore
 import com.revan.hanged.data.remote.HangedAPI
 import com.revan.hanged.data.repository.DataStorePreferencesRepositoryImpl
@@ -14,6 +13,7 @@ import com.revan.hanged.domain.repository.FirebaseRepository
 import com.revan.hanged.domain.repository.HangedRepository
 import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.utils.Constants.BASE_URL
+import com.revan.hanged.utils.Toaster
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

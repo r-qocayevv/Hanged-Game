@@ -1,4 +1,4 @@
-package com.revan.hanged
+package com.revan.hanged.utils
 
 import android.content.Context
 import android.widget.Toast

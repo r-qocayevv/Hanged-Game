@@ -148,6 +148,7 @@ class GameViewModel @Inject constructor(
     }
 
     private fun guessLetter(key: Char, roomInfo: RoomInfo) {
+        _state.update { it.copy(isYourTurn = false) }
         socketHandler.guessLetter(roomInfo = roomInfo, letter = key.toString())
     }
 

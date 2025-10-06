@@ -2,7 +2,6 @@ package com.revan.hanged.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.revan.hanged.Toaster
 import com.revan.hanged.data.HomeSocketEvents
 import com.revan.hanged.data.SocketHandler
 import com.revan.hanged.domain.RoomStatus
@@ -20,6 +19,7 @@ import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.navigation.ScreenRoute
 import com.revan.hanged.navigation.ScreenRoute.Home
 import com.revan.hanged.navigation.ScreenRoute.Login
+import com.revan.hanged.utils.Toaster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

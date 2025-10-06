@@ -109,6 +109,9 @@ fun GameHistoryScreen(
 
             item {
                 MyOwnGameHistoryInfo(uiState = uiState)
+                Spacer(Modifier
+                    .height(4.dp)
+                    .background(DarkGray))
             }
             stickyHeader {
                 Tabs(
@@ -116,7 +119,7 @@ fun GameHistoryScreen(
                     selectedTabIndex = uiState.selectedTabIndex,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 10.dp, top = 4.dp),
+                        .padding(bottom = 10.dp),
                     onItemSelection = {
                         onEvent(GameHistoryEvent.OnTabSelected(it))
                     })

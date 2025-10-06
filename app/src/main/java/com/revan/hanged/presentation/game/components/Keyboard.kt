@@ -55,7 +55,6 @@ fun Keyboard(
                         isCanGuessWordOpen = isCanGuessWordOpen,
                         isYourTurn = isYourTurn,
                         onClick = {
-                            println("KEY CLICKED $key")
                             onKeyClick(key)
                         }
                     )

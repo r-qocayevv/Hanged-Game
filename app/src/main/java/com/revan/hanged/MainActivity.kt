@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.revan.hanged.navigation.NavGraph
 import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.ui.theme.HangedTheme
+import com.revan.hanged.utils.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
 

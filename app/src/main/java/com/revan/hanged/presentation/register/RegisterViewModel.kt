@@ -2,12 +2,12 @@ package com.revan.hanged.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.revan.hanged.Toaster
 import com.revan.hanged.domain.use_case.SaveUsernameToFirestoreUseCase
 import com.revan.hanged.domain.use_case.SignUpUseCase
 import com.revan.hanged.navigation.NavigationCommand
 import com.revan.hanged.navigation.Navigator
 import com.revan.hanged.navigation.ScreenRoute
+import com.revan.hanged.utils.Toaster
 import com.revan.hanged.utils.isValidEmail
 import com.revan.hanged.utils.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel

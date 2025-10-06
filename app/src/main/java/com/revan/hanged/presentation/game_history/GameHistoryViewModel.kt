@@ -2,7 +2,6 @@ package com.revan.hanged.presentation.game_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.revan.hanged.Toaster
 import com.revan.hanged.domain.model.Game
 import com.revan.hanged.domain.use_case.GetGamesUseCase
 import com.revan.hanged.domain.use_case.GetLeaderboardUseCase
@@ -11,6 +10,7 @@ import com.revan.hanged.domain.use_case.GetUserIdFromLocalUseCase
 import com.revan.hanged.domain.use_case.GetUsernameFromLocalUseCase
 import com.revan.hanged.navigation.NavigationCommand
 import com.revan.hanged.navigation.Navigator
+import com.revan.hanged.utils.Toaster
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
