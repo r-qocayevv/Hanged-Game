@@ -1,7 +1,7 @@
 ## 🪓 Hanged – Multiplayer Hangman Game
 
 ### 🧩 App Thumbnail
-<img src="screenshots/hanged_thumbnail.png" width="200"/>
+<img src="screenshots/hanged_thumbnail.png"/>
 
 ---
 
